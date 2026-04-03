@@ -29,6 +29,13 @@ body {
   background: #f5f7fb;
 }
 
+.route-loading {
+  min-height: calc(100vh - 56px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -189,8 +196,31 @@ a {
   background: transparent;
 }
 
+.ant-pro-page-container-warp-page-header {
+  padding-block: 16px;
+  padding-inline: 24px;
+  background: transparent;
+}
+
+.ant-pro-page-container-warp-page-header .ant-page-header {
+  padding: 0;
+}
+
+.ant-pro-page-container-warp-page-header .ant-page-header-heading {
+  min-height: auto;
+}
+
+.ant-pro-page-container-warp-page-header .ant-page-header-heading-title {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.ant-pro-page-container-warp-page-header .ant-breadcrumb {
+  color: rgba(0, 0, 0, 0.45);
+}
+
 .ant-pro-page-container-children-container {
-  padding-block-start: 24px;
+  padding-block-start: 8px;
   padding-inline: 24px;
 }
 
@@ -209,16 +239,72 @@ a {
   border-radius: 8px;
 }
 
+.ant-pro-table-search {
+  margin-bottom: 16px;
+  padding: 20px 24px 4px;
+  background: #fff;
+}
+
+.ant-pro-table-search .ant-form-item {
+  margin-bottom: 16px;
+}
+
 .ant-table-wrapper .ant-table {
   border-radius: 8px 8px 0 0;
 }
 
 .ant-table-wrapper .ant-table-thead > tr > th {
   background: #fafafa;
+  color: rgba(0, 0, 0, 0.88);
+  font-weight: 600;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr > td {
+  padding-block: 14px;
 }
 
 .ant-pro-table-list-toolbar {
-  padding-block: 0 16px;
+  padding-block: 0 12px;
+}
+
+.ant-pro-table-list-toolbar-container {
+  padding-inline: 0;
+}
+
+.ant-pro-table-list-toolbar-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.ant-pro-table-list-toolbar-subtitle {
+  margin-top: 4px;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 14px;
+}
+
+.ant-pro-table-list-toolbar-left {
+  row-gap: 10px;
+}
+
+.ant-pro-table-list-toolbar .ant-tabs-top > .ant-tabs-nav {
+  margin: 8px 0 0;
+}
+
+.ant-pro-table-list-toolbar .ant-tabs-tab {
+  padding: 10px 0;
+}
+
+.ant-pro-table-list-toolbar .ant-tabs-tab-btn {
+  font-weight: 500;
+}
+
+.ant-pro-card .ant-card-body,
+.ant-card .ant-card-body {
+  padding: 24px;
+}
+
+.ant-table-wrapper .ant-pagination {
+  margin: 20px 0 0;
 }
 
 .pro-like-header {
@@ -252,6 +338,18 @@ a {
   display: block;
 }
 
+@media (max-width: 992px) {
+  .ant-pro-table-list-toolbar-subtitle {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .ant-pro-page-container-children-container {
+    padding-inline: 16px;
+  }
+}
+
 .pro-like-header__title {
   color: rgba(0, 0, 0, 0.88);
   font-size: 22px;
@@ -262,6 +360,18 @@ a {
 .pro-like-header__icon {
   color: rgba(0, 0, 0, 0.65);
   font-size: 20px;
+}
+
+.pro-like-header__logout.ant-btn {
+  height: 36px;
+  padding-inline: 12px;
+  border-radius: 18px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.pro-like-header__logout.ant-btn:hover {
+  color: #1677ff;
+  background: rgba(22, 119, 255, 0.06);
 }
 
 .pro-like-header__profile {
@@ -413,4 +523,260 @@ a {
   align-items: center;
   gap: 12px;
   color: rgba(0, 0, 0, 0.88);
+}
+
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at top left, rgba(22, 119, 255, 0.18), transparent 32%),
+    radial-gradient(circle at right center, rgba(19, 194, 194, 0.18), transparent 28%),
+    linear-gradient(135deg, #f4f7ff 0%, #eef5ff 45%, #f9fbff 100%);
+}
+
+.login-page__backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.72)),
+    linear-gradient(90deg, rgba(22, 119, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(rgba(22, 119, 255, 0.05) 1px, transparent 1px);
+  background-size: auto, 32px 32px, 32px 32px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.7));
+}
+
+.login-page__shell {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(360px, 420px);
+  gap: 40px;
+  align-items: center;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.login-page__hero {
+  padding: 32px 12px 32px 0;
+}
+
+.login-page__brand {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.login-page__brand-mark {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 22px;
+  color: #fff;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: linear-gradient(135deg, #1677ff 0%, #13c2c2 100%);
+  box-shadow: 0 24px 48px rgba(22, 119, 255, 0.22);
+}
+
+.login-page__eyebrow {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: #1677ff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.login-page__title.ant-typography {
+  max-width: 640px;
+  margin-bottom: 16px;
+  color: #111827;
+  font-size: 48px;
+  line-height: 1.12;
+}
+
+.login-page__subtitle.ant-typography {
+  max-width: 620px;
+  margin-bottom: 0;
+  color: rgba(17, 24, 39, 0.72);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.login-page__highlights {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  max-width: 720px;
+}
+
+.login-page__highlight {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+}
+
+.login-page__highlight .anticon {
+  margin-top: 4px;
+  color: #1677ff;
+  font-size: 22px;
+}
+
+.login-page__highlight .ant-typography {
+  display: block;
+}
+
+.login-page__highlight .ant-typography:last-child {
+  margin: 6px 0 0;
+  color: rgba(17, 24, 39, 0.68);
+}
+
+.login-card.ant-card {
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.14);
+  backdrop-filter: blur(20px);
+}
+
+.login-card .ant-card-body {
+  padding: 32px;
+}
+
+.login-card__header {
+  margin-bottom: 28px;
+}
+
+.login-card__header .ant-typography {
+  display: block;
+}
+
+.login-card__header .ant-typography h3 {
+  margin-bottom: 8px;
+}
+
+.login-card .ant-form-item-label > label {
+  color: #111827;
+  font-weight: 500;
+}
+
+.login-card .ant-input-affix-wrapper,
+.login-card .ant-input,
+.login-card .ant-input-password {
+  border-radius: 12px;
+}
+
+.login-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: -4px 0 24px;
+  color: rgba(17, 24, 39, 0.65);
+}
+
+.login-card__meta a {
+  color: #1677ff;
+}
+
+.login-card .ant-btn-primary {
+  height: 46px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.login-card__footer {
+  padding-top: 20px;
+  border-top: 1px solid rgba(148, 163, 184, 0.16);
+  color: rgba(17, 24, 39, 0.55);
+  font-size: 13px;
+}
+
+@media (max-width: 1080px) {
+  .login-page__shell {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding-block: 32px;
+  }
+
+  .login-page__hero {
+    padding: 0;
+  }
+
+  .login-page__highlights {
+    max-width: none;
+  }
+
+  .login-card.ant-card {
+    max-width: 460px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ant-pro-page-container-children-container,
+  .workplace-page {
+    padding: 16px;
+  }
+
+  .workplace-hero .ant-card-body {
+    padding: 20px;
+  }
+
+  .workplace-hero__content,
+  .workplace-chart {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .workplace-hero__intro {
+    align-items: flex-start;
+  }
+
+  .workplace-hero__stats {
+    width: 100%;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .workplace-hero__stats > div + div {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .workplace-links,
+  .workplace-teams,
+  .login-page__highlights {
+    grid-template-columns: 1fr;
+  }
+
+  .login-page__brand {
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .login-page__title.ant-typography {
+    font-size: 34px;
+  }
+
+  .login-card.ant-card {
+    max-width: none;
+  }
+
+  .login-card .ant-card-body {
+    padding: 24px;
+  }
 }

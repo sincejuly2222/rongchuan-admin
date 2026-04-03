@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Users Management Prototype</title>
+    <link rel="stylesheet" href="./users-management-prototype.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">RC</div>
+          <div>
+            <div class="brand-name">Rongchuan Admin</div>
+            <div class="brand-subtitle">Users Management</div>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <a class="nav-item" href="#">首页</a>
+          <a class="nav-item active" href="#">用户管理</a>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="page-header">
+          <div class="breadcrumb">首页 / 用户管理</div>
+          <h1>用户管理</h1>
+          <p>用户账号列表，支持筛选、状态切换、批量选择与快捷操作。</p>
+        </header>
+
+        <section class="tabs">
+          <button class="tab active" data-tab="all">全部 (8)</button>
+          <button class="tab" data-tab="enabled">启用 (5)</button>
+          <button class="tab" data-tab="disabled">禁用 (3)</button>
+        </section>
+
+        <section class="search-card">
+          <div class="search-grid">
+            <label class="field">
+              <span>姓名</span>
+              <input id="filter-name" type="text" placeholder="请输入姓名" />
+            </label>
+            <label class="field">
+              <span>账号</span>
+              <input id="filter-account" type="text" placeholder="请输入账号" />
+            </label>
+            <label class="field">
+              <span>状态</span>
+              <select id="filter-status">
+                <option value="all">请选择</option>
+                <option value="enabled">启用</option>
+                <option value="disabled">禁用</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="search-actions">
+            <button class="ghost-btn" id="reset-btn">重置</button>
+            <button class="primary-btn" id="search-btn">查询</button>
+          </div>
+        </section>
+
+        <section class="table-card">
+          <div class="table-toolbar">
+            <div>
+              <h2>用户管理</h2>
+              <p>用户账号列表，支持筛选、状态切换、批量选择与快捷操作。</p>
+            </div>
+
+            <div class="toolbar-actions">
+              <button class="primary-btn">新建用户</button>
+              <button class="ghost-btn">导出配置</button>
+              <button class="ghost-btn" disabled>批量操作</button>
+            </div>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>姓名</th>
+                  <th>账号</th>
+                  <th>邮箱</th>
+                  <th>手机号</th>
+                  <th>角色</th>
+                  <th>状态</th>
+                  <th>最近登录</th>
+                  <th>创建时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="table-body"></tbody>
+            </table>
+          </div>
+
+          <div class="pagination">
+            <span id="pagination-text">第 1-8 条/总共 8 条</span>
+            <div class="pagination-buttons">
+              <button class="page-btn active">1</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal-backdrop hidden" id="modal-backdrop"></div>
+
+    <section class="modal hidden" id="create-modal">
+      <div class="modal-header">
+        <h3>新增用户</h3>
+        <button class="modal-close" data-close>×</button>
+      </div>
+      <div class="modal-body form-grid">
+        <label class="field">
+          <span>账号</span>
+          <input type="text" placeholder="请输入登录账号" />
+        </label>
+        <label class="field">
+          <span>姓名</span>
+          <input type="text" placeholder="请输入用户姓名" />
+        </label>
+        <label class="field">
+          <span>初始密码</span>
+          <input type="password" placeholder="请输入初始密码" />
+        </label>
+        <label class="field">
+          <span>邮箱</span>
+          <input type="text" placeholder="请输入邮箱" />
+        </label>
+        <label class="field">
+          <span>手机号</span>
+          <input type="text" placeholder="请输入手机号" />
+        </label>
+        <label class="field">
+          <span>角色</span>
+          <input type="text" placeholder="请输入角色名称" />
+        </label>
+        <label class="field">
+          <span>状态</span>
+          <select>
+            <option>启用</option>
+            <option>禁用</option>
+          </select>
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button class="ghost-btn" data-close>取消</button>
+        <button class="primary-btn" data-close>提交</button>
+      </div>
+    </section>
+
+    <section class="modal hidden" id="edit-modal">
+      <div class="modal-header">
+        <h3>编辑用户</h3>
+        <button class="modal-close" data-close>×</button>
+      </div>
+      <div class="modal-body form-grid">
+        <label class="field">
+          <span>账号</span>
+          <input type="text" value="liqing" />
+        </label>
+        <label class="field">
+          <span>姓名</span>
+          <input type="text" value="李青" />
+        </label>
+        <label class="field">
+          <span>邮箱</span>
+          <input type="text" value="liqing@rongchuan.local" />
+        </label>
+        <label class="field">
+          <span>手机号</span>
+          <input type="text" value="13800000002" />
+        </label>
+        <label class="field">
+          <span>角色</span>
+          <input type="text" value="运营管理员" />
+        </label>
+        <label class="field">
+          <span>状态</span>
+          <select>
+            <option selected>启用</option>
+            <option>禁用</option>
+          </select>
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button class="ghost-btn" data-close>取消</button>
+        <button class="primary-btn" data-close>保存</button>
+      </div>
+    </section>
+
+    <section class="modal hidden modal-compact" id="reset-password-modal">
+      <div class="modal-header">
+        <h3>重置密码</h3>
+        <button class="modal-close" data-close>×</button>
+      </div>
+      <div class="modal-body form-grid">
+        <label class="field">
+          <span>账号</span>
+          <input type="text" value="liqing" disabled />
+        </label>
+        <label class="field">
+          <span>新密码</span>
+          <input type="password" placeholder="请输入新密码" />
+        </label>
+        <label class="field">
+          <span>确认密码</span>
+          <input type="password" placeholder="请再次输入新密码" />
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button class="ghost-btn" data-close>取消</button>
+        <button class="primary-btn" data-close>确认重置</button>
+      </div>
+    </section>
+
+    <div class="prototype-shortcuts">
+      <button class="ghost-btn" data-open="create-modal">查看新增弹窗</button>
+      <button class="ghost-btn" data-open="edit-modal">查看编辑弹窗</button>
+      <button class="ghost-btn" data-open="reset-password-modal">查看重置密码弹窗</button>
+    </div>
+
+    <script src="./users-management-prototype.js"></script>
+  </body>
+</html>
