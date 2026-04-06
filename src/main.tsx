@@ -5,7 +5,9 @@ import { App as AntdApp, ConfigProvider, theme } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
 import { BrowserRouter } from 'react-router-dom';
 import { AppRouter } from './router';
-import './styles/global.css';
+import './styles/reset.css';
+import './styles/base.css';
+import './styles/pro-table.less';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

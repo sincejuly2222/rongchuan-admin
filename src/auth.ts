@@ -12,6 +12,7 @@ const ACCESS_TOKEN_STORAGE_KEY = 'rongchuan-admin-access-token';
 const USER_STORAGE_KEY = 'rongchuan-admin-user';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '';
 const DEV_BYPASS_TOKEN = '__DEV_BYPASS_TOKEN__';
+const DEV_ENABLE_SESSION_RESTORE = import.meta.env.VITE_DEV_ENABLE_SESSION_RESTORE === 'true';
 
 type AuthSnapshot = {
   initialized: boolean;
@@ -292,7 +293,10 @@ export async function initializeAuth() {
   if (!initializePromise) {
     initializePromise = (async () => {
       try {
-        if (!authState.accessToken) {
+        const shouldAttemptSessionRestore =
+          !import.meta.env.DEV || DEV_ENABLE_SESSION_RESTORE;
+
+        if (!authState.accessToken && shouldAttemptSessionRestore) {
           await refreshAccessToken();
         }
 

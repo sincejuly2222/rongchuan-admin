@@ -12,7 +12,8 @@ import {
   login,
   loginWithDevBypass,
   useAuth,
-} from '../auth';
+} from '../../auth';
+import './index.less';
 
 type LoginFormValues = {
   username: string;
@@ -45,9 +46,9 @@ export function LoginPage() {
 
       const targetPath =
         typeof location.state === 'object' &&
-        location.state &&
-        'from' in location.state &&
-        typeof location.state.from === 'string'
+          location.state &&
+          'from' in location.state &&
+          typeof location.state.from === 'string'
           ? location.state.from
           : '/dashboard';
 
@@ -64,18 +65,29 @@ export function LoginPage() {
 
     const targetPath =
       typeof location.state === 'object' &&
-      location.state &&
-      'from' in location.state &&
-      typeof location.state.from === 'string'
+        location.state &&
+        'from' in location.state &&
+        typeof location.state.from === 'string'
         ? location.state.from
-        : '/users';
+        : '/dashboard';
 
     navigate(targetPath, { replace: true });
   };
 
+  void handleDevBypass;
+
   return (
     <div className="login-page">
       <div className="login-page__backdrop" />
+      <video
+        className="login-page__video"
+        src="https://gw.alipayobjects.com/v/huamei_gcee1x/afts/video/4mH9SrLaoIQAAAAAAAAAAAAAK4eUAQBr"
+        autoPlay
+        playsInline
+        loop
+        crossOrigin="anonymous"
+        muted
+      />
 
       <div className="login-page__shell">
         <section className="login-page__hero">
@@ -89,29 +101,8 @@ export function LoginPage() {
                 欢迎登录容川后台管理系统
               </Typography.Title>
               <Typography.Paragraph className="login-page__subtitle">
-                统一处理用户、角色、菜单与内容管理，保留现有工作台风格，同时把登录入口独立出来。
+                统一处理用户、角色、菜单与内容管理
               </Typography.Paragraph>
-            </div>
-          </div>
-
-          <div className="login-page__highlights">
-            <div className="login-page__highlight">
-              <SafetyCertificateOutlined />
-              <div>
-                <Typography.Text strong>安全登录</Typography.Text>
-                <Typography.Paragraph>
-                  使用会话态保护后台页面，未登录时自动跳转到登录页。
-                </Typography.Paragraph>
-              </div>
-            </div>
-            <div className="login-page__highlight">
-              <UserOutlined />
-              <div>
-                <Typography.Text strong>统一入口</Typography.Text>
-                <Typography.Paragraph>
-                  登录成功后直接进入工作台首页，保持后台导航结构不变。
-                </Typography.Paragraph>
-              </div>
             </div>
           </div>
         </section>
@@ -119,9 +110,6 @@ export function LoginPage() {
         <Card bordered={false} className="login-card">
           <div className="login-card__header">
             <Typography.Title level={3}>账号登录</Typography.Title>
-            <Typography.Text type="secondary">
-              请输入已注册的后台账号，系统会通过真实接口完成登录
-            </Typography.Text>
           </div>
 
           <Form<LoginFormValues>
@@ -158,7 +146,7 @@ export function LoginPage() {
               <Form.Item name="remember" valuePropName="checked" noStyle>
                 <Checkbox>7 天内免重复登录</Checkbox>
               </Form.Item>
-              <a href="#reset-password">忘记密码</a>
+              {/* <a href="#reset-password">忘记密码</a> */}
             </div>
 
             <Form.Item style={{ marginBottom: 16 }}>
@@ -166,14 +154,6 @@ export function LoginPage() {
                 登录系统
               </Button>
             </Form.Item>
-
-            {import.meta.env.DEV ? (
-              <Form.Item style={{ marginBottom: 0 }}>
-                <Button block onClick={handleDevBypass}>
-                  开发环境直达
-                </Button>
-              </Form.Item>
-            ) : null}
           </Form>
 
           <div className="login-card__footer">

@@ -1,0 +1,250 @@
+.ant-pro-layout {
+  min-height: 100vh;
+}
+
+.ant-pro-layout-bg-list {
+  background: #f5f7fb;
+}
+
+.ant-pro-global-header {
+  height: 56px;
+  line-height: 56px;
+  padding-inline: 24px;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  box-shadow: none;
+}
+
+.ant-pro-global-header-header-actions {
+  gap: 4px;
+}
+
+.ant-pro-global-header-header-actions-item {
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.ant-pro-global-header-header-actions-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.ant-pro-global-header-logo {
+  gap: 12px;
+  min-width: 260px;
+}
+
+.ant-pro-global-header-logo img {
+  width: 32px;
+  height: 32px;
+}
+
+.ant-pro-global-header-logo h1 {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 32px;
+  letter-spacing: 0;
+}
+
+.ant-pro-global-header-collapsed-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+}
+
+.ant-pro-global-header .ant-space {
+  align-items: center;
+}
+
+.ant-pro-global-header .ant-avatar {
+  width: 32px;
+  height: 32px;
+}
+
+.ant-pro-global-header .ant-typography {
+  margin-bottom: 0;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 14px;
+}
+
+.ant-pro-sider {
+  background: #fff;
+  border-right: 1px solid #f0f0f0;
+  box-shadow: none;
+}
+
+.ant-pro-sider-logo {
+  height: 56px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.ant-pro-sider .ant-menu {
+  background: #fff;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.ant-pro-sider .ant-menu-inline {
+  border-inline-end: 0;
+}
+
+.ant-pro-sider .ant-menu-item,
+.ant-pro-sider .ant-menu-submenu-title {
+  height: 40px;
+  line-height: 40px;
+  margin-inline: 8px;
+  width: calc(100% - 16px);
+  border-radius: 6px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.ant-pro-sider .ant-menu-item-selected {
+  background: rgba(22, 119, 255, 0.08);
+  color: #1677ff;
+}
+
+.ant-pro-sider .ant-menu-item-selected .anticon,
+.ant-pro-sider .ant-menu-item-selected .ant-pro-base-menu-inline-item-text {
+  color: #1677ff;
+  font-weight: 500;
+}
+
+.ant-pro-sider .ant-menu-item:not(.ant-menu-item-selected):hover,
+.ant-pro-sider .ant-menu-submenu-title:hover {
+  background: rgba(22, 119, 255, 0.06);
+  color: #1677ff;
+}
+
+.ant-pro-sider .ant-menu-submenu-selected > .ant-menu-submenu-title,
+.ant-pro-sider .ant-menu-submenu-open > .ant-menu-submenu-title {
+  color: #1677ff;
+}
+
+.ant-pro-sider .ant-menu-sub.ant-menu-inline {
+  background: transparent;
+}
+
+.ant-pro-sider .ant-menu-sub.ant-menu-inline .ant-menu-item {
+  height: 36px;
+  line-height: 36px;
+  margin-inline: 18px 8px;
+  width: calc(100% - 26px);
+}
+
+.ant-pro-sider .anticon,
+.ant-pro-sider .ant-pro-base-menu-inline-item-icon {
+  color: inherit;
+}
+
+.ant-pro-sider .ant-pro-base-menu-inline-group {
+  margin-block: 4px;
+}
+
+.ant-pro-sider .ant-pro-base-menu-inline-item-title {
+  font-size: 15px;
+}
+
+.ant-pro-page-container {
+  background: transparent;
+}
+
+.ant-pro-page-container-warp-page-header {
+  padding-block: 16px;
+  padding-inline: 24px;
+  background: transparent;
+}
+
+.ant-pro-page-container-warp-page-header .ant-page-header {
+  padding: 0;
+}
+
+.ant-pro-page-container-warp-page-header .ant-page-header-heading {
+  min-height: auto;
+}
+
+.ant-pro-page-container-warp-page-header .ant-page-header-heading-title {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.ant-pro-page-container-warp-page-header .ant-breadcrumb {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.ant-pro-page-container-children-container {
+  padding-block-start: 8px;
+  padding-inline: 24px;
+}
+
+.pro-like-header {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+
+  &__left,
+  &__right,
+  &__profile {
+    display: flex;
+    align-items: center;
+  }
+
+  &__left {
+    gap: 12px;
+  }
+
+  &__right {
+    gap: 16px;
+  }
+
+  &__logo {
+    width: 32px;
+    height: 32px;
+    display: block;
+  }
+
+  &__title {
+    color: rgba(0, 0, 0, 0.88);
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  &__icon {
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 20px;
+  }
+
+  &__logout.ant-btn {
+    height: 36px;
+    padding-inline: 12px;
+    border-radius: 18px;
+    color: rgba(0, 0, 0, 0.65);
+
+    &:hover {
+      color: #1677ff;
+      background: rgba(22, 119, 255, 0.06);
+    }
+  }
+
+  &__profile {
+    gap: 10px;
+  }
+
+  &__name {
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 14px;
+    font-weight: 400;
+  }
+}
+
+@media (max-width: 768px) {
+  .ant-pro-page-container-children-container {
+    padding-inline: 16px;
+  }
+}

@@ -4,6 +4,7 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import { Avatar, Button, Card, Col, List, Progress, Row, Typography } from 'antd';
+import './index.less';
 
 const projects = [
   {

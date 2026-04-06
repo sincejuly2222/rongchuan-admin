@@ -1,0 +1,104 @@
+:root {
+  color: #1f1f1f;
+  background: #f5f7fb;
+  font-family:
+    'PingFang SC',
+    'Microsoft YaHei',
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --app-bg: #f5f7fb;
+  --app-text: #1f1f1f;
+  --app-text-secondary: rgba(0, 0, 0, 0.45);
+  --app-border: #f0f0f0;
+  --app-radius-sm: 6px;
+  --app-radius-md: 8px;
+  --app-radius-pill: 999px;
+  --app-space-4: 4px;
+  --app-space-8: 8px;
+  --app-space-12: 12px;
+  --app-space-16: 16px;
+  --app-space-20: 20px;
+  --app-space-24: 24px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-width: 320px;
+  color: var(--app-text);
+  background: var(--app-bg);
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.route-loading {
+  min-height: calc(100vh - 56px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

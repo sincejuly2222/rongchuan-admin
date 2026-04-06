@@ -204,6 +204,10 @@ export type MenuListItem = {
   updated_at: string;
 };
 
+export type MenuTreeItem = MenuListItem & {
+  children: MenuTreeItem[];
+};
+
 export type MenuListResponse = PaginatedResponse<MenuListItem>;
 
 export type MenuListParams = {
@@ -233,6 +237,10 @@ export type UpdateMenuStatusRequest = {
 export type UpdateMenuStatusResponse = {
   id: number;
   status: 0 | 1;
+};
+
+export type DeleteMenuResponse = {
+  id: number;
 };
 
 export type PermissionListItem = {

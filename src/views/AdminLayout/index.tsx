@@ -1,28 +1,37 @@
+import type { ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import {
   DashboardOutlined,
   LogoutOutlined,
   MenuOutlined,
   ProfileOutlined,
-  SafetyCertificateOutlined,
   QuestionCircleOutlined,
+  SafetyCertificateOutlined,
   SafetyOutlined,
   TranslationOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import {
-  PageContainer,
-  ProLayout,
-  type MenuDataItem,
-} from '@ant-design/pro-components';
+import { PageContainer, ProLayout, type MenuDataItem } from '@ant-design/pro-components';
 import { App, Avatar, Button, Space, Tag, Typography } from 'antd';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { getCurrentUser, logout, useAuth } from '../auth';
+import { fetchMenuTree, type MenuTreeItem } from '../../api/menus';
+import { getCurrentUser, logout, useAuth } from '../../auth';
+import './index.less';
 
-const menuData: MenuDataItem[] = [
+const iconMap: Record<string, ReactNode> = {
+  DashboardOutlined: <DashboardOutlined />,
+  UserOutlined: <UserOutlined />,
+  SafetyOutlined: <SafetyOutlined />,
+  SafetyCertificateOutlined: <SafetyCertificateOutlined />,
+  MenuOutlined: <MenuOutlined />,
+  ProfileOutlined: <ProfileOutlined />,
+};
+
+const fallbackMenuData: MenuDataItem[] = [
   {
     path: '/dashboard',
     name: '首页',
-    icon: <DashboardOutlined />
+    icon: <DashboardOutlined />,
   },
   {
     path: '/users',
@@ -51,11 +60,37 @@ const menuData: MenuDataItem[] = [
   },
 ];
 
+function resolveMenuIcon(iconName: string | null) {
+  if (!iconName) {
+    return <MenuOutlined />;
+  }
+
+  return iconMap[iconName] ?? <MenuOutlined />;
+}
+
+function buildMenuData(items: MenuTreeItem[]): MenuDataItem[] {
+  return items
+    .filter((item) => item.status === 1)
+    .sort((left, right) => left.sort_order - right.sort_order || left.id - right.id)
+    .map((item) => {
+      const children = buildMenuData(item.children);
+
+      return {
+        path: item.path || undefined,
+        name: item.menu_name,
+        icon: resolveMenuIcon(item.icon),
+        children: children.length > 0 ? children : undefined,
+      } satisfies MenuDataItem;
+    })
+    .filter((item) => item.path || item.children?.length);
+}
+
 export function AdminLayout() {
   const { message } = App.useApp();
   const location = useLocation();
   const navigate = useNavigate();
   const auth = useAuth();
+  const [menuData, setMenuData] = useState<MenuDataItem[]>(fallbackMenuData);
 
   const currentUser = auth.user ?? getCurrentUser();
   const currentAvatar =
@@ -63,6 +98,36 @@ export function AdminLayout() {
     'https://gw.alipayobjects.com/zos/antfincdn/CRHobKQmQx/avatar%26mail.png';
   const currentName = currentUser?.name || currentUser?.username || '未登录';
   const currentRoles = currentUser?.roleNames?.filter(Boolean) ?? [];
+
+  useEffect(() => {
+    let active = true;
+
+    const loadMenus = async () => {
+      try {
+        const tree = await fetchMenuTree();
+
+        if (!active) {
+          return;
+        }
+
+        const nextMenuData = buildMenuData(tree);
+        setMenuData(nextMenuData.length > 0 ? nextMenuData : fallbackMenuData);
+      } catch (error) {
+        if (!active) {
+          return;
+        }
+
+        setMenuData(fallbackMenuData);
+        message.error(error instanceof Error ? error.message : '获取导航菜单失败');
+      }
+    };
+
+    void loadMenus();
+
+    return () => {
+      active = false;
+    };
+  }, [message]);
 
   const handleLogout = async () => {
     await logout();
@@ -76,9 +141,9 @@ export function AdminLayout() {
         <img
           className="pro-like-header__logo"
           src="https://gw.alipayobjects.com/zos/antfincdn/KPR%24Yt%26m7/logo.svg"
-          alt="Ant Design Pro"
+          alt="Rongchuan Admin"
         />
-        <span className="pro-like-header__title">Ant Design Pro</span>
+        <span className="pro-like-header__title">Rongchuan Admin</span>
       </div>
 
       <div className="pro-like-header__right">
@@ -177,10 +242,7 @@ export function AdminLayout() {
         },
       }}
     >
-      <PageContainer
-        content={false}
-        style={{ padding: 0 }}
-      >
+      <PageContainer content={false} style={{ padding: 0 }}>
         <Outlet />
       </PageContainer>
     </ProLayout>

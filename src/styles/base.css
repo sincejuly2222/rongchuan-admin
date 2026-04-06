@@ -1,0 +1,23 @@
+.page-root,
+.section-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.section-stack {
+  gap: var(--app-space-16);
+}
+
+.page-card-wrap {
+  padding: var(--app-space-24);
+}
+
+.full-width {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .page-card-wrap {
+    padding: var(--app-space-16);
+  }
+}
