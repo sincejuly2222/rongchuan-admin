@@ -269,3 +269,266 @@ export type CreatePermissionRequest = {
 };
 
 export type UpdatePermissionRequest = CreatePermissionRequest;
+
+export type AlumniStudentRecord = {
+  id: number;
+  school: string;
+  college: string | null;
+  major: string;
+  class_name: string | null;
+  student_no: string | null;
+  enrollment_year: number;
+  graduation_year: number | null;
+  status: number;
+};
+
+export type AlumniCard = {
+  id: number;
+  slogan: string | null;
+  show_phone: number;
+  show_wechat: number;
+  wechat: string | null;
+  need_approval: number;
+  allow_search: number;
+};
+
+export type AlumniListItem = {
+  id: number;
+  open_id: string | null;
+  phone: string | null;
+  name: string;
+  avatar: string | null;
+  gender: number | null;
+  company: string | null;
+  position: string | null;
+  city: string | null;
+  status: number;
+  verified_status: number;
+  allow_search: number;
+  created_at: string;
+  school?: string | null;
+  college?: string | null;
+  major?: string | null;
+  class_name?: string | null;
+  enrollment_year?: number | null;
+  slogan?: string | null;
+};
+
+export type AlumniDetail = AlumniListItem & {
+  updated_at: string;
+  bio: string | null;
+  student_record: AlumniStudentRecord | null;
+  card: AlumniCard | null;
+};
+
+export type AlumniListResponse = PaginatedResponse<AlumniListItem>;
+
+export type AlumniListParams = {
+  current?: number;
+  pageSize?: number;
+  keyword?: string;
+  status?: number | string;
+  verifiedStatus?: number | string;
+  enrollmentYear?: number | string;
+  major?: string;
+  className?: string;
+  company?: string;
+};
+
+export type CreateAlumniRequest = {
+  openId?: string | null;
+  phone?: string | null;
+  name: string;
+  avatar?: string | null;
+  gender?: number | null;
+  company?: string | null;
+  position?: string | null;
+  city?: string | null;
+  bio?: string | null;
+  status?: number;
+  verifiedStatus?: number;
+  allowSearch?: number;
+};
+
+export type UpdateAlumniRequest = Partial<CreateAlumniRequest> & {
+  name?: string;
+};
+
+export type UpdateAlumniStatusResponse = {
+  id: number;
+  status: 0 | 1;
+};
+
+export type UpsertStudentRecordRequest = {
+  school: string;
+  college?: string | null;
+  major: string;
+  className?: string | null;
+  studentNo?: string | null;
+  enrollmentYear: number;
+  graduationYear?: number | null;
+  status?: number;
+};
+
+export type UpsertCardRequest = {
+  slogan?: string | null;
+  showPhone?: number;
+  showWechat?: number;
+  wechat?: string | null;
+  needApproval?: number;
+  allowSearch?: number;
+};
+
+export type StudentRecordListItem = {
+  id: number;
+  user_id: number;
+  name: string;
+  phone: string | null;
+  school: string;
+  college: string | null;
+  major: string;
+  class_name: string | null;
+  student_no: string | null;
+  enrollment_year: number;
+  graduation_year: number | null;
+  status: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type StudentRecordListResponse = PaginatedResponse<StudentRecordListItem>;
+
+export type StudentRecordListParams = {
+  current?: number;
+  pageSize?: number;
+  keyword?: string;
+  status?: number | string;
+  enrollmentYear?: number | string;
+  major?: string;
+};
+
+export type UpdateStudentRecordStatusResponse = {
+  id: number;
+  status: 0 | 1 | 2;
+};
+
+export type ImportJobItem = {
+  id: number;
+  name: string;
+  type: string;
+  operator_name: string;
+  status: number;
+  total_count: number;
+  success_count: number;
+  failed_count: number;
+  error_details: Array<{ row: number; message: string }> | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ImportJobListResponse = PaginatedResponse<ImportJobItem>;
+
+export type ImportJobListParams = {
+  current?: number;
+  pageSize?: number;
+  type?: string;
+  status?: number | string;
+};
+
+export type OrganizationItem = {
+  id: number;
+  name: string;
+  type: string;
+  principal: string | null;
+  city: string | null;
+  member_count: number;
+  pending_count: number;
+  active_count: number;
+  founded_at: string | null;
+  status: number;
+  description: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type OrganizationListResponse = PaginatedResponse<OrganizationItem>;
+
+export type OrganizationListParams = {
+  current?: number;
+  pageSize?: number;
+  keyword?: string;
+  type?: string;
+  status?: number | string;
+  city?: string;
+};
+
+export type CreateOrganizationRequest = {
+  name: string;
+  type: string;
+  principal?: string | null;
+  city?: string | null;
+  memberCount?: number;
+  pendingCount?: number;
+  activeCount?: number;
+  foundedAt?: string | null;
+  status?: number;
+  description?: string | null;
+};
+
+export type UpdateOrganizationRequest = CreateOrganizationRequest;
+
+export type UpdateOrganizationStatusResponse = {
+  id: number;
+  status: 0 | 1;
+};
+
+export type ActivityItem = {
+  id: number;
+  name: string;
+  type: string;
+  organization_id: number | null;
+  organization_name: string | null;
+  city: string | null;
+  venue: string | null;
+  start_time: string;
+  end_time: string | null;
+  capacity: number;
+  enrollments: number;
+  status: number;
+  description: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ActivityListResponse = PaginatedResponse<ActivityItem>;
+
+export type ActivityListParams = {
+  current?: number;
+  pageSize?: number;
+  keyword?: string;
+  type?: string;
+  status?: number | string;
+  city?: string;
+  organizationId?: number | string;
+};
+
+export type CreateActivityRequest = {
+  name: string;
+  type: string;
+  organizationId?: number | null;
+  city?: string | null;
+  venue?: string | null;
+  startTime: string;
+  endTime?: string | null;
+  capacity?: number;
+  enrollments?: number;
+  status?: number;
+  description?: string | null;
+};
+
+export type UpdateActivityRequest = CreateActivityRequest;
+
+export type UpdateActivityStatusResponse = {
+  id: number;
+  status: 0 | 1 | 2;
+};

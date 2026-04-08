@@ -108,6 +108,90 @@ const mockMenus: MenuListItem[] = [
     created_at: '2026-04-03T09:00:00.000Z',
     updated_at: '2026-04-03T09:00:00.000Z',
   },
+  {
+    id: 7,
+    parent_id: 0,
+    parent_name: null,
+    menu_name: '校友业务',
+    menu_code: 'alumni_services',
+    path: null,
+    component: null,
+    icon: 'TeamOutlined',
+    sort_order: 70,
+    status: 1,
+    created_at: '2026-04-08T09:00:00.000Z',
+    updated_at: '2026-04-08T09:00:00.000Z',
+  },
+  {
+    id: 8,
+    parent_id: 7,
+    parent_name: '校友业务',
+    menu_name: '校友管理',
+    menu_code: 'alumni',
+    path: '/alumni',
+    component: 'views/AlumniPage',
+    icon: 'TeamOutlined',
+    sort_order: 71,
+    status: 1,
+    created_at: '2026-04-08T09:00:00.000Z',
+    updated_at: '2026-04-08T09:00:00.000Z',
+  },
+  {
+    id: 9,
+    parent_id: 7,
+    parent_name: '校友业务',
+    menu_name: '学籍管理',
+    menu_code: 'student_status',
+    path: '/student-status',
+    component: 'views/StudentStatusPage',
+    icon: 'ReadOutlined',
+    sort_order: 72,
+    status: 1,
+    created_at: '2026-04-08T09:00:00.000Z',
+    updated_at: '2026-04-08T09:00:00.000Z',
+  },
+  {
+    id: 10,
+    parent_id: 7,
+    parent_name: '校友业务',
+    menu_name: 'Excel 批量导入',
+    menu_code: 'excel_import',
+    path: '/excel-import',
+    component: 'views/ExcelImportPage',
+    icon: 'FileExcelOutlined',
+    sort_order: 73,
+    status: 1,
+    created_at: '2026-04-08T09:00:00.000Z',
+    updated_at: '2026-04-08T09:00:00.000Z',
+  },
+  {
+    id: 11,
+    parent_id: 7,
+    parent_name: '校友业务',
+    menu_name: '活动管理',
+    menu_code: 'activities',
+    path: '/activities',
+    component: 'views/ActivitiesPage',
+    icon: 'CalendarOutlined',
+    sort_order: 74,
+    status: 1,
+    created_at: '2026-04-08T09:00:00.000Z',
+    updated_at: '2026-04-08T09:00:00.000Z',
+  },
+  {
+    id: 12,
+    parent_id: 7,
+    parent_name: '校友业务',
+    menu_name: '组织管理',
+    menu_code: 'organizations',
+    path: '/organizations',
+    component: 'views/OrganizationsPage',
+    icon: 'ApartmentOutlined',
+    sort_order: 75,
+    status: 1,
+    created_at: '2026-04-08T09:00:00.000Z',
+    updated_at: '2026-04-08T09:00:00.000Z',
+  },
 ];
 
 async function parseResponse<T>(response: Response, fallbackMessage: string) {
@@ -232,7 +316,9 @@ export async function fetchMenuTree() {
 export async function createMenu(params: CreateMenuRequest) {
   if (isDevBypassToken(getAccessToken())) {
     const parentMenu =
-      params.parentId && params.parentId > 0 ? mockMenus.find((item) => item.id === params.parentId) : null;
+      params.parentId && params.parentId > 0
+        ? mockMenus.find((item) => item.id === params.parentId)
+        : null;
 
     const nextMenu: MenuListItem = {
       id: getNextMockId(),
@@ -277,7 +363,9 @@ export async function updateMenu(id: number, params: UpdateMenuRequest) {
     }
 
     const parentMenu =
-      params.parentId && params.parentId > 0 ? mockMenus.find((item) => item.id === params.parentId) : null;
+      params.parentId && params.parentId > 0
+        ? mockMenus.find((item) => item.id === params.parentId)
+        : null;
 
     target.parent_id = params.parentId ?? 0;
     target.parent_name = parentMenu?.menu_name ?? null;

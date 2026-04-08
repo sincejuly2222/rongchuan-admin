@@ -22,6 +22,21 @@ const MenusPage = lazy(() =>
 const ProfilePage = lazy(() =>
   import('./views/ProfilePage').then((module) => ({ default: module.ProfilePage }))
 );
+const AlumniPage = lazy(() =>
+  import('./views/AlumniPage').then((module) => ({ default: module.AlumniPage }))
+);
+const StudentStatusPage = lazy(() =>
+  import('./views/StudentStatusPage').then((module) => ({ default: module.StudentStatusPage }))
+);
+const ExcelImportPage = lazy(() =>
+  import('./views/ExcelImportPage').then((module) => ({ default: module.ExcelImportPage }))
+);
+const ActivitiesPage = lazy(() =>
+  import('./views/ActivitiesPage').then((module) => ({ default: module.ActivitiesPage }))
+);
+const OrganizationsPage = lazy(() =>
+  import('./views/OrganizationsPage').then((module) => ({ default: module.OrganizationsPage }))
+);
 const LoginPage = lazy(() =>
   import('./views/LoginPage').then((module) => ({ default: module.LoginPage }))
 );
@@ -89,10 +104,15 @@ export function AppRouter() {
             { path: 'permissions', element: withSuspense(<PermissionsPage />) },
             { path: 'menus', element: withSuspense(<MenusPage />) },
             { path: 'profile', element: withSuspense(<ProfilePage />) },
+            { path: 'alumni', element: withSuspense(<AlumniPage />) },
+            { path: 'student-status', element: withSuspense(<StudentStatusPage />) },
+            { path: 'excel-import', element: withSuspense(<ExcelImportPage />) },
+            { path: 'activities', element: withSuspense(<ActivitiesPage />) },
+            { path: 'organizations', element: withSuspense(<OrganizationsPage />) },
             { path: '*', element: <Navigate to="/dashboard" replace /> },
           ],
         },
       ],
-    }
+    },
   ]);
 }

@@ -1,13 +1,18 @@
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import {
+  ApartmentOutlined,
+  CalendarOutlined,
   DashboardOutlined,
+  FileExcelOutlined,
   LogoutOutlined,
   MenuOutlined,
   ProfileOutlined,
   QuestionCircleOutlined,
+  ReadOutlined,
   SafetyCertificateOutlined,
   SafetyOutlined,
+  TeamOutlined,
   TranslationOutlined,
   UserOutlined,
 } from '@ant-design/icons';
@@ -25,6 +30,44 @@ const iconMap: Record<string, ReactNode> = {
   SafetyCertificateOutlined: <SafetyCertificateOutlined />,
   MenuOutlined: <MenuOutlined />,
   ProfileOutlined: <ProfileOutlined />,
+  TeamOutlined: <TeamOutlined />,
+  ReadOutlined: <ReadOutlined />,
+  FileExcelOutlined: <FileExcelOutlined />,
+  CalendarOutlined: <CalendarOutlined />,
+  ApartmentOutlined: <ApartmentOutlined />,
+};
+
+const businessMenuGroup: MenuDataItem = {
+  path: '/alumni-services',
+  name: '校友业务',
+  icon: <TeamOutlined />,
+  children: [
+    {
+      path: '/alumni',
+      name: '校友管理',
+      icon: <TeamOutlined />,
+    },
+    {
+      path: '/student-status',
+      name: '学籍管理',
+      icon: <ReadOutlined />,
+    },
+    {
+      path: '/excel-import',
+      name: 'Excel 批量导入',
+      icon: <FileExcelOutlined />,
+    },
+    {
+      path: '/activities',
+      name: '活动管理',
+      icon: <CalendarOutlined />,
+    },
+    {
+      path: '/organizations',
+      name: '组织管理',
+      icon: <ApartmentOutlined />,
+    },
+  ],
 };
 
 const fallbackMenuData: MenuDataItem[] = [
@@ -53,6 +96,7 @@ const fallbackMenuData: MenuDataItem[] = [
     name: '菜单管理',
     icon: <MenuOutlined />,
   },
+  businessMenuGroup,
   {
     path: '/profile',
     name: '个人中心',
@@ -85,12 +129,46 @@ function buildMenuData(items: MenuTreeItem[]): MenuDataItem[] {
     .filter((item) => item.path || item.children?.length);
 }
 
+function collectMenuPaths(items: MenuDataItem[]): Set<string> {
+  const paths = new Set<string>();
+
+  items.forEach((item) => {
+    if (item.path) {
+      paths.add(item.path);
+    }
+
+    if (item.children?.length) {
+      collectMenuPaths(item.children).forEach((path) => paths.add(path));
+    }
+  });
+
+  return paths;
+}
+
+function mergeBusinessMenus(menuData: MenuDataItem[]) {
+  const existingPaths = collectMenuPaths(menuData);
+  const missingChildren =
+    businessMenuGroup.children?.filter((child) => !child.path || !existingPaths.has(child.path)) ?? [];
+
+  if (missingChildren.length === 0) {
+    return menuData;
+  }
+
+  return [
+    ...menuData,
+    {
+      ...businessMenuGroup,
+      children: missingChildren,
+    },
+  ];
+}
+
 export function AdminLayout() {
   const { message } = App.useApp();
   const location = useLocation();
   const navigate = useNavigate();
   const auth = useAuth();
-  const [menuData, setMenuData] = useState<MenuDataItem[]>(fallbackMenuData);
+  const [menuData, setMenuData] = useState<MenuDataItem[]>(mergeBusinessMenus(fallbackMenuData));
 
   const currentUser = auth.user ?? getCurrentUser();
   const currentAvatar =
@@ -111,13 +189,14 @@ export function AdminLayout() {
         }
 
         const nextMenuData = buildMenuData(tree);
-        setMenuData(nextMenuData.length > 0 ? nextMenuData : fallbackMenuData);
+        const resolvedMenuData = nextMenuData.length > 0 ? nextMenuData : fallbackMenuData;
+        setMenuData(mergeBusinessMenus(resolvedMenuData));
       } catch (error) {
         if (!active) {
           return;
         }
 
-        setMenuData(fallbackMenuData);
+        setMenuData(mergeBusinessMenus(fallbackMenuData));
         message.error(error instanceof Error ? error.message : '获取导航菜单失败');
       }
     };
