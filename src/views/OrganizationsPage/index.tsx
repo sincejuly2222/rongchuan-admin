@@ -101,9 +101,9 @@ export function OrganizationsPage() {
   return (
     <div className="business-page">
       <Row gutter={[16, 16]} className="business-page__summary">
-        <Col xs={24} sm={12} xl={8}><Card bordered={false}><Statistic title="组织总数" value={summary.total} prefix={<ApartmentOutlined />} /></Card></Col>
-        <Col xs={24} sm={12} xl={8}><Card bordered={false}><Statistic title="运营中的组织" value={summary.running} prefix={<FlagOutlined />} /></Card></Col>
-        <Col xs={24} sm={12} xl={8}><Card bordered={false}><Statistic title="覆盖成员数" value={summary.members} prefix={<TeamOutlined />} /></Card></Col>
+        <Col xs={24} sm={12} xl={8}><Card variant="borderless"><Statistic title="组织总数" value={summary.total} prefix={<ApartmentOutlined />} /></Card></Col>
+        <Col xs={24} sm={12} xl={8}><Card variant="borderless"><Statistic title="运营中的组织" value={summary.running} prefix={<FlagOutlined />} /></Card></Col>
+        <Col xs={24} sm={12} xl={8}><Card variant="borderless"><Statistic title="覆盖成员数" value={summary.members} prefix={<TeamOutlined />} /></Card></Col>
       </Row>
 
       <ProTable<OrganizationItem>
@@ -141,7 +141,7 @@ export function OrganizationsPage() {
         ]}
       />
 
-      <Modal title={currentRecord ? '编辑组织' : '新建组织'} open={modalOpen} confirmLoading={submitting} destroyOnHidden onOk={() => {
+      <Modal title={currentRecord ? '编辑组织' : '新建组织'} open={modalOpen} confirmLoading={submitting} destroyOnHidden okText="确定" cancelText="取消" onOk={() => {
         void form.validateFields().then(async (values) => {
           setSubmitting(true);
           const payload = {

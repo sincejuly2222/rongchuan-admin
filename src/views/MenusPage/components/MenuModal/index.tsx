@@ -33,6 +33,8 @@ export function MenuModal({
       forceRender
       confirmLoading={submitting}
       destroyOnHidden
+      okText="确定"
+      cancelText="取消"
       onOk={onOk}
       onCancel={onCancel}
     >

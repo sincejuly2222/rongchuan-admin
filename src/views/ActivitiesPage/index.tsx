@@ -120,9 +120,9 @@ export function ActivitiesPage() {
   return (
     <div className="business-page">
       <Row gutter={[16, 16]} className="business-page__summary">
-        <Col xs={24} sm={12} xl={8}><Card bordered={false}><Statistic title="活动总数" value={summary.total} prefix={<CalendarOutlined />} /></Card></Col>
-        <Col xs={24} sm={12} xl={8}><Card bordered={false}><Statistic title="报名中的活动" value={summary.open} prefix={<TeamOutlined />} /></Card></Col>
-        <Col xs={24} sm={12} xl={8}><Card bordered={false}><Statistic title="累计报名人次" value={summary.enrollments} prefix={<EnvironmentOutlined />} /></Card></Col>
+        <Col xs={24} sm={12} xl={8}><Card variant="borderless"><Statistic title="活动总数" value={summary.total} prefix={<CalendarOutlined />} /></Card></Col>
+        <Col xs={24} sm={12} xl={8}><Card variant="borderless"><Statistic title="报名中的活动" value={summary.open} prefix={<TeamOutlined />} /></Card></Col>
+        <Col xs={24} sm={12} xl={8}><Card variant="borderless"><Statistic title="累计报名人次" value={summary.enrollments} prefix={<EnvironmentOutlined />} /></Card></Col>
       </Row>
 
       <ProTable<ActivityItem>
@@ -160,7 +160,7 @@ export function ActivitiesPage() {
         ]}
       />
 
-      <Modal title={currentRecord ? '编辑活动' : '新建活动'} open={modalOpen} confirmLoading={submitting} destroyOnHidden onOk={() => {
+      <Modal title={currentRecord ? '编辑活动' : '新建活动'} open={modalOpen} confirmLoading={submitting} destroyOnHidden okText="确定" cancelText="取消" onOk={() => {
         void form.validateFields().then(async (values) => {
           setSubmitting(true);
           const payload = {

@@ -2,7 +2,7 @@ import { App, Form } from 'antd';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ActionType } from '@ant-design/pro-components';
 import { fetchRoles } from '../../api/roles';
-import { createUser, updateUser, updateUserStatus } from '../../api/users';
+import { createUser, deleteUser, updateUser, updateUserStatus } from '../../api/users';
 import { UserModals } from './components/UserModals';
 import { UsersTable } from './components/UsersTable';
 import type {
@@ -50,6 +50,7 @@ export function UsersPage() {
           data.list.map((item) => ({
             label: item.role_name,
             value: item.id,
+            code: item.role_code,
           })),
         );
       })
@@ -68,6 +69,10 @@ export function UsersPage() {
     () => new Map(roleOptions.map((item) => [item.label, item.value])),
     [roleOptions],
   );
+  const superAdminRoleIds = useMemo(
+    () => new Set(roleOptions.filter((item) => item.code === 'SUPER_ADMIN').map((item) => item.value)),
+    [roleOptions],
+  );
 
   const handleStatusChange = async (record: UserRecord, checked: boolean) => {
     try {
@@ -76,6 +81,17 @@ export function UsersPage() {
       void actionRef.current?.reload();
     } catch (error) {
       message.error(error instanceof Error ? error.message : '更新用户状态失败');
+    }
+  };
+
+  const handleDeleteUser = async (record: UserRecord) => {
+    try {
+      await deleteUser(record.id);
+      message.success(`已删除用户 ${record.account}`);
+      setSelectedRows((rows) => rows.filter((item) => item.id !== record.id));
+      void actionRef.current?.reload();
+    } catch (error) {
+      message.error(error instanceof Error ? error.message : '删除用户失败');
     }
   };
 
@@ -195,6 +211,7 @@ export function UsersPage() {
         summary={summary}
         selectedRows={selectedRows}
         roleNameToIdMap={roleNameToIdMap}
+        superAdminRoleIds={superAdminRoleIds}
         setActiveTab={setActiveTab}
         setSelectedRows={setSelectedRows}
         setSummary={setSummary}
@@ -202,6 +219,9 @@ export function UsersPage() {
         onEdit={openEditModal}
         onResetPassword={openResetPasswordModal}
         onStatusChange={handleStatusChange}
+        onDelete={(record) => {
+          void handleDeleteUser(record);
+        }}
       />
 
       <UserModals

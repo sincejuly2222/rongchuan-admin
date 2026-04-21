@@ -2,22 +2,23 @@ import { getAccessToken, isDevBypassToken, logout } from '../auth';
 import type {
   ApiResponse,
   CreateRoleRequest,
+  RoleMenusResponse,
   RoleListItem,
   RoleListParams,
   RoleListResponse,
-  RolePermissionsResponse,
+  UpdateRoleMenusRequest,
   UpdateRoleRequest,
-  UpdateRolePermissionsRequest,
 } from './types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '';
 
 export type {
   CreateRoleRequest,
+  RoleMenusResponse,
   RoleListItem,
   RoleListParams,
   RoleListResponse,
-  RolePermissionsResponse,
+  UpdateRoleMenusRequest,
   UpdateRoleRequest,
 };
 
@@ -31,7 +32,7 @@ const mockRoles: RoleListItem[] = [
     created_at: '2026-03-01T09:00:00.000Z',
     updated_at: '2026-04-03T14:00:00.000Z',
     member_count: 2,
-    permission_count: 4,
+    menu_count: 12,
   },
   {
     id: 2,
@@ -42,7 +43,7 @@ const mockRoles: RoleListItem[] = [
     created_at: '2026-03-05T10:30:00.000Z',
     updated_at: '2026-04-03T10:28:00.000Z',
     member_count: 5,
-    permission_count: 3,
+    menu_count: 6,
   },
 ];
 
@@ -86,9 +87,9 @@ async function parseResponse<T>(response: Response, fallbackMessage: string) {
   return payload.data;
 }
 
-const mockRolePermissions = new Map<number, number[]>([
-  [1, [1, 2, 3, 4]],
-  [2, [1, 3, 4]],
+const mockRoleMenus = new Map<number, number[]>([
+  [1, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]],
+  [2, [1, 7, 8, 9, 10, 11, 12]],
 ]);
 
 export async function fetchRoles(params: RoleListParams) {
@@ -130,7 +131,7 @@ export async function createRole(params: CreateRoleRequest) {
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       member_count: 0,
-      permission_count: 0,
+      menu_count: 0,
     };
 
     mockRoles.unshift(nextRole);
@@ -190,15 +191,15 @@ export async function updateRole(id: number, params: UpdateRoleRequest) {
   return parseResponse<RoleListItem>(response, '更新角色失败');
 }
 
-export async function fetchRolePermissions(roleId: number) {
+export async function fetchRoleMenus(roleId: number) {
   if (isDevBypassToken(getAccessToken())) {
     return {
       roleId,
-      permissionIds: mockRolePermissions.get(roleId) ?? [],
-    } satisfies RolePermissionsResponse;
+      menuIds: mockRoleMenus.get(roleId) ?? [],
+    } satisfies RoleMenusResponse;
   }
 
-  const response = await fetch(`${API_BASE_URL}/api/roles/${roleId}/permissions`, {
+  const response = await fetch(`${API_BASE_URL}/api/roles/${roleId}/menus`, {
     headers: {
       Authorization: `Bearer ${getAccessToken() ?? ''}`,
     },
@@ -210,19 +211,25 @@ export async function fetchRolePermissions(roleId: number) {
     throw new Error('登录已失效，请重新登录');
   }
 
-  return parseResponse<RolePermissionsResponse>(response, '获取角色权限失败');
+  return parseResponse<RoleMenusResponse>(response, '获取角色菜单失败');
 }
 
-export async function updateRolePermissions(roleId: number, params: UpdateRolePermissionsRequest) {
+export async function updateRoleMenus(roleId: number, params: UpdateRoleMenusRequest) {
   if (isDevBypassToken(getAccessToken())) {
-    mockRolePermissions.set(roleId, params.permissionIds);
+    mockRoleMenus.set(roleId, params.menuIds);
+
+    const target = mockRoles.find((item) => item.id === roleId);
+    if (target) {
+      target.menu_count = params.menuIds.length;
+    }
+
     return {
       roleId,
-      permissionIds: params.permissionIds,
-    } satisfies RolePermissionsResponse;
+      menuIds: params.menuIds,
+    } satisfies RoleMenusResponse;
   }
 
-  const response = await fetch(`${API_BASE_URL}/api/roles/${roleId}/permissions`, {
+  const response = await fetch(`${API_BASE_URL}/api/roles/${roleId}/menus`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -237,5 +244,5 @@ export async function updateRolePermissions(roleId: number, params: UpdateRolePe
     throw new Error('登录已失效，请重新登录');
   }
 
-  return parseResponse<RolePermissionsResponse>(response, '更新角色权限失败');
+  return parseResponse<RoleMenusResponse>(response, '更新角色菜单失败');
 }

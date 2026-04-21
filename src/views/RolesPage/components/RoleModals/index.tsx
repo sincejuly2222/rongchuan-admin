@@ -1,26 +1,26 @@
-import { Form, Input, Modal, Select } from 'antd';
+import { Form, Input, Modal, Select, Tree, Typography } from 'antd';
 import type { FormInstance } from 'antd';
+import type { DataNode } from 'antd/es/tree';
 import type {
-  PermissionFormValues,
-  PermissionOption,
+  MenuFormValues,
   RoleFormValues,
   RoleRecord,
 } from '../../types';
 
 type RoleModalsProps = {
   roleForm: FormInstance<RoleFormValues>;
-  permissionForm: FormInstance<PermissionFormValues>;
+  menuForm: FormInstance<MenuFormValues>;
   currentRole: RoleRecord | null;
   editingRole: RoleRecord | null;
-  permissionOptions: PermissionOption[];
+  menuTreeData: DataNode[];
   roleModalOpen: boolean;
-  permissionModalOpen: boolean;
+  menuModalOpen: boolean;
   roleSubmitting: boolean;
-  permissionSubmitting: boolean;
+  menuSubmitting: boolean;
   onRoleOk: () => void;
-  onPermissionOk: () => void;
+  onMenuOk: () => void;
   onRoleCancel: () => void;
-  onPermissionCancel: () => void;
+  onMenuCancel: () => void;
 };
 
 const statusOptions = [
@@ -30,18 +30,18 @@ const statusOptions = [
 
 export function RoleModals({
   roleForm,
-  permissionForm,
+  menuForm,
   currentRole,
   editingRole,
-  permissionOptions,
+  menuTreeData,
   roleModalOpen,
-  permissionModalOpen,
+  menuModalOpen,
   roleSubmitting,
-  permissionSubmitting,
+  menuSubmitting,
   onRoleOk,
-  onPermissionOk,
+  onMenuOk,
   onRoleCancel,
-  onPermissionCancel,
+  onMenuCancel,
 }: RoleModalsProps) {
   return (
     <>
@@ -50,7 +50,8 @@ export function RoleModals({
         open={roleModalOpen}
         forceRender
         confirmLoading={roleSubmitting}
-        destroyOnHidden
+        okText="确定"
+        cancelText="取消"
         onOk={onRoleOk}
         onCancel={onRoleCancel}
       >
@@ -86,21 +87,38 @@ export function RoleModals({
       </Modal>
 
       <Modal
-        title={currentRole ? `权限配置 - ${currentRole.name}` : '权限配置'}
-        open={permissionModalOpen}
-        confirmLoading={permissionSubmitting}
-        destroyOnHidden
-        onOk={onPermissionOk}
-        onCancel={onPermissionCancel}
+        title={currentRole ? `菜单配置 - ${currentRole.name}` : '菜单配置'}
+        open={menuModalOpen}
+        forceRender
+        confirmLoading={menuSubmitting}
+        width={640}
+        okText="确定"
+        cancelText="取消"
+        onOk={onMenuOk}
+        onCancel={onMenuCancel}
       >
-        <Form<PermissionFormValues> form={permissionForm} layout="vertical">
-          <Form.Item label="已选权限" name="permissionIds">
-            <Select
-              mode="multiple"
-              placeholder="请选择权限"
-              options={permissionOptions}
-              optionFilterProp="label"
-            />
+        <Form<MenuFormValues> form={menuForm} layout="vertical">
+          <Typography.Paragraph type="secondary">
+            勾选后，该角色登录账号的左侧导航只展示这些菜单页面；父级分组会随子菜单一并保留。
+          </Typography.Paragraph>
+          <Form.Item label="可打开的菜单页面">
+            <Form.Item noStyle shouldUpdate>
+              {() => (
+                <Tree
+                  checkable
+                  defaultExpandAll
+                  treeData={menuTreeData}
+                  checkedKeys={menuForm.getFieldValue('menuIds') ?? []}
+                  onCheck={(checkedKeys) => {
+                    const nextKeys = Array.isArray(checkedKeys) ? checkedKeys : checkedKeys.checked;
+                    menuForm.setFieldValue(
+                      'menuIds',
+                      nextKeys.map((key) => Number(key)).filter((key) => Number.isInteger(key)),
+                    );
+                  }}
+                />
+              )}
+            </Form.Item>
           </Form.Item>
         </Form>
       </Modal>

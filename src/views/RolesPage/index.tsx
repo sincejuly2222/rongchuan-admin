@@ -1,18 +1,18 @@
 import { App, Form } from 'antd';
 import type { ActionType } from '@ant-design/pro-components';
+import type { DataNode } from 'antd/es/tree';
 import { useEffect, useRef, useState } from 'react';
-import { fetchPermissions } from '../../api/permissions';
+import { fetchMenuTree, type MenuTreeItem } from '../../api/menus';
 import {
   createRole,
-  fetchRolePermissions,
+  fetchRoleMenus,
   updateRole,
-  updateRolePermissions,
+  updateRoleMenus,
 } from '../../api/roles';
 import { RoleModals } from './components/RoleModals';
 import { RolesTable } from './components/RolesTable';
 import type {
-  PermissionFormValues,
-  PermissionOption,
+  MenuFormValues,
   RoleFormValues,
   RoleRecord,
   StatusTabKey,
@@ -23,7 +23,7 @@ export function RolesPage() {
   const { message } = App.useApp();
   const actionRef = useRef<ActionType>(null);
   const [roleForm] = Form.useForm<RoleFormValues>();
-  const [permissionForm] = Form.useForm<PermissionFormValues>();
+  const [menuForm] = Form.useForm<MenuFormValues>();
   const [activeTab, setActiveTab] = useState<StatusTabKey>('all');
   const [selectedRows, setSelectedRows] = useState<RoleRecord[]>([]);
   const [summary, setSummary] = useState<Record<StatusTabKey, number>>({
@@ -34,30 +34,23 @@ export function RolesPage() {
   const [roleModalOpen, setRoleModalOpen] = useState(false);
   const [roleSubmitting, setRoleSubmitting] = useState(false);
   const [editingRole, setEditingRole] = useState<RoleRecord | null>(null);
-  const [permissionModalOpen, setPermissionModalOpen] = useState(false);
-  const [permissionSubmitting, setPermissionSubmitting] = useState(false);
+  const [menuModalOpen, setMenuModalOpen] = useState(false);
+  const [menuSubmitting, setMenuSubmitting] = useState(false);
   const [currentRole, setCurrentRole] = useState<RoleRecord | null>(null);
-  const [permissionOptions, setPermissionOptions] = useState<PermissionOption[]>([]);
+  const [menuTree, setMenuTree] = useState<MenuTreeItem[]>([]);
 
   useEffect(() => {
     let active = true;
 
-    void fetchPermissions({ current: 1, pageSize: 200 })
+    void fetchMenuTree({ scope: 'all' })
       .then((data) => {
-        if (!active) {
-          return;
+        if (active) {
+          setMenuTree(data);
         }
-
-        setPermissionOptions(
-          data.list.map((item) => ({
-            label: `${item.permission_name} (${item.permission_code})`,
-            value: item.id,
-          })),
-        );
       })
       .catch(() => {
         if (active) {
-          setPermissionOptions([]);
+          setMenuTree([]);
         }
       });
 
@@ -65,6 +58,30 @@ export function RolesPage() {
       active = false;
     };
   }, []);
+
+  const buildMenuTreeData = (items: MenuTreeItem[]): DataNode[] =>
+    items.map((item) => ({
+      key: item.id,
+      title: item.path ? `${item.menu_name} (${item.path})` : item.menu_name,
+      children: buildMenuTreeData(item.children),
+    }));
+
+  const collectMenuIdsWithParents = (menuIds: number[]) => {
+    const selectedIds = new Set(menuIds);
+
+    const walk = (items: MenuTreeItem[], parents: number[]) => {
+      items.forEach((item) => {
+        if (selectedIds.has(item.id)) {
+          parents.forEach((parentId) => selectedIds.add(parentId));
+        }
+
+        walk(item.children, [...parents, item.id]);
+      });
+    };
+
+    walk(menuTree, []);
+    return [...selectedIds];
+  };
 
   const openCreateModal = () => {
     setEditingRole(null);
@@ -122,41 +139,41 @@ export function RolesPage() {
     }
   };
 
-  const openPermissionModal = async (record: RoleRecord) => {
+  const openMenuModal = async (record: RoleRecord) => {
     try {
-      const data = await fetchRolePermissions(record.id);
+      const data = await fetchRoleMenus(record.id);
       setCurrentRole(record);
-      permissionForm.setFieldsValue({
-        permissionIds: data.permissionIds,
+      menuForm.setFieldsValue({
+        menuIds: data.menuIds,
       });
-      setPermissionModalOpen(true);
+      setMenuModalOpen(true);
     } catch (error) {
-      message.error(error instanceof Error ? error.message : '获取角色权限失败');
+      message.error(error instanceof Error ? error.message : '获取角色菜单失败');
     }
   };
 
-  const handleSavePermissions = async () => {
+  const handleSaveMenus = async () => {
     if (!currentRole) {
       return;
     }
 
     try {
-      const values = await permissionForm.validateFields();
-      setPermissionSubmitting(true);
-      await updateRolePermissions(currentRole.id, {
-        permissionIds: values.permissionIds ?? [],
+      const menuIds = menuForm.getFieldValue('menuIds') ?? [];
+      setMenuSubmitting(true);
+      await updateRoleMenus(currentRole.id, {
+        menuIds: collectMenuIdsWithParents(menuIds),
       });
-      message.success(`已更新角色 ${currentRole.name} 的权限配置`);
-      setPermissionModalOpen(false);
+      message.success(`已更新角色 ${currentRole.name} 的菜单配置`);
+      setMenuModalOpen(false);
       setCurrentRole(null);
-      permissionForm.resetFields();
+      menuForm.resetFields();
       void actionRef.current?.reload();
     } catch (error) {
       if (error instanceof Error) {
         message.error(error.message);
       }
     } finally {
-      setPermissionSubmitting(false);
+      setMenuSubmitting(false);
     }
   };
 
@@ -172,32 +189,32 @@ export function RolesPage() {
         setSummary={setSummary}
         onCreate={openCreateModal}
         onEdit={openEditModal}
-        onPermissionConfig={(record) => {
-          void openPermissionModal(record);
+        onMenuConfig={(record) => {
+          void openMenuModal(record);
         }}
       />
 
       <RoleModals
         roleForm={roleForm}
-        permissionForm={permissionForm}
+        menuForm={menuForm}
         currentRole={currentRole}
         editingRole={editingRole}
-        permissionOptions={permissionOptions}
+        menuTreeData={buildMenuTreeData(menuTree)}
         roleModalOpen={roleModalOpen}
-        permissionModalOpen={permissionModalOpen}
+        menuModalOpen={menuModalOpen}
         roleSubmitting={roleSubmitting}
-        permissionSubmitting={permissionSubmitting}
+        menuSubmitting={menuSubmitting}
         onRoleOk={() => void handleSubmitRole()}
-        onPermissionOk={() => void handleSavePermissions()}
+        onMenuOk={() => void handleSaveMenus()}
         onRoleCancel={() => {
           setRoleModalOpen(false);
           setEditingRole(null);
           roleForm.resetFields();
         }}
-        onPermissionCancel={() => {
-          setPermissionModalOpen(false);
+        onMenuCancel={() => {
+          setMenuModalOpen(false);
           setCurrentRole(null);
-          permissionForm.resetFields();
+          menuForm.resetFields();
         }}
       />
     </div>

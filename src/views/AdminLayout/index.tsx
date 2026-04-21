@@ -10,7 +10,6 @@ import {
   ProfileOutlined,
   QuestionCircleOutlined,
   ReadOutlined,
-  SafetyCertificateOutlined,
   SafetyOutlined,
   TeamOutlined,
   TranslationOutlined,
@@ -27,7 +26,6 @@ const iconMap: Record<string, ReactNode> = {
   DashboardOutlined: <DashboardOutlined />,
   UserOutlined: <UserOutlined />,
   SafetyOutlined: <SafetyOutlined />,
-  SafetyCertificateOutlined: <SafetyCertificateOutlined />,
   MenuOutlined: <MenuOutlined />,
   ProfileOutlined: <ProfileOutlined />,
   TeamOutlined: <TeamOutlined />,
@@ -85,11 +83,6 @@ const fallbackMenuData: MenuDataItem[] = [
     path: '/roles',
     name: '角色管理',
     icon: <SafetyOutlined />,
-  },
-  {
-    path: '/permissions',
-    name: '权限管理',
-    icon: <SafetyCertificateOutlined />,
   },
   {
     path: '/menus',
@@ -169,6 +162,7 @@ export function AdminLayout() {
   const navigate = useNavigate();
   const auth = useAuth();
   const [menuData, setMenuData] = useState<MenuDataItem[]>(mergeBusinessMenus(fallbackMenuData));
+  const [menuLoaded, setMenuLoaded] = useState(false);
 
   const currentUser = auth.user ?? getCurrentUser();
   const currentAvatar =
@@ -189,14 +183,15 @@ export function AdminLayout() {
         }
 
         const nextMenuData = buildMenuData(tree);
-        const resolvedMenuData = nextMenuData.length > 0 ? nextMenuData : fallbackMenuData;
-        setMenuData(mergeBusinessMenus(resolvedMenuData));
+        setMenuData(nextMenuData);
+        setMenuLoaded(true);
       } catch (error) {
         if (!active) {
           return;
         }
 
         setMenuData(mergeBusinessMenus(fallbackMenuData));
+        setMenuLoaded(true);
         message.error(error instanceof Error ? error.message : '获取导航菜单失败');
       }
     };
@@ -207,6 +202,22 @@ export function AdminLayout() {
       active = false;
     };
   }, [message]);
+
+  useEffect(() => {
+    if (!menuLoaded || menuData.length === 0) {
+      return;
+    }
+
+    const accessiblePaths = collectMenuPaths(menuData);
+    const currentPath = location.pathname;
+    const hasAccess =
+      accessiblePaths.has(currentPath) ||
+      (currentPath.startsWith('/dashboard/apis/') && accessiblePaths.has('/dashboard'));
+
+    if (!hasAccess) {
+      navigate(accessiblePaths.values().next().value || '/dashboard', { replace: true });
+    }
+  }, [location.pathname, menuData, menuLoaded, navigate]);
 
   const handleLogout = async () => {
     await logout();

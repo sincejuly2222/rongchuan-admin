@@ -7,7 +7,7 @@ export type RoleRecord = {
   code: string;
   description: string;
   memberCount: number;
-  permissionCount: number;
+  menuCount: number;
   status: RoleStatus;
   createdAt: string;
   updatedAt: string;
@@ -22,11 +22,6 @@ export type RoleFormValues = {
   status: RoleStatus;
 };
 
-export type PermissionFormValues = {
-  permissionIds: number[];
-};
-
-export type PermissionOption = {
-  label: string;
-  value: number;
+export type MenuFormValues = {
+  menuIds: number[];
 };

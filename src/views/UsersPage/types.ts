@@ -36,4 +36,5 @@ export type ResetPasswordFormValues = {
 export type RoleOption = {
   label: string;
   value: number;
+  code: string;
 };

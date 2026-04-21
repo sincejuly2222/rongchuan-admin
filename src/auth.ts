@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from 'react';
 import type {
   AuthUser,
+  LoginPublicKeyResponse,
   LoginResponse,
   MeResponse,
   RefreshResponse,
@@ -34,6 +35,7 @@ type RequestOptions = {
 const listeners = new Set<() => void>();
 let refreshPromise: Promise<string | null> | null = null;
 let initializePromise: Promise<void> | null = null;
+let loginPublicKeyPromise: Promise<LoginPublicKeyResponse> | null = null;
 
 let authState: AuthSnapshot = {
   initialized: false,
@@ -180,6 +182,70 @@ async function fetchCurrentUser() {
   });
 }
 
+function decodePemPublicKey(publicKey: string) {
+  const normalized = publicKey
+    .replace('-----BEGIN PUBLIC KEY-----', '')
+    .replace('-----END PUBLIC KEY-----', '')
+    .replace(/\s/g, '');
+  const binary = window.atob(normalized);
+  const bytes = new Uint8Array(binary.length);
+
+  for (let index = 0; index < binary.length; index += 1) {
+    bytes[index] = binary.charCodeAt(index);
+  }
+
+  return bytes.buffer;
+}
+
+function bytesToBase64(bytes: Uint8Array) {
+  let binary = '';
+  bytes.forEach((byte) => {
+    binary += String.fromCharCode(byte);
+  });
+
+  return window.btoa(binary);
+}
+
+async function fetchLoginPublicKey() {
+  if (!loginPublicKeyPromise) {
+    loginPublicKeyPromise = request<LoginPublicKeyResponse>(
+      '/api/auth/login-public-key',
+      {
+        method: 'GET',
+      },
+      {
+        auth: false,
+        retry: false,
+      },
+    );
+  }
+
+  return loginPublicKeyPromise;
+}
+
+async function encryptLoginPassword(password: string) {
+  const { publicKey } = await fetchLoginPublicKey();
+  const cryptoKey = await window.crypto.subtle.importKey(
+    'spki',
+    decodePemPublicKey(publicKey),
+    {
+      name: 'RSA-OAEP',
+      hash: 'SHA-256',
+    },
+    false,
+    ['encrypt'],
+  );
+  const encrypted = await window.crypto.subtle.encrypt(
+    {
+      name: 'RSA-OAEP',
+    },
+    cryptoKey,
+    new TextEncoder().encode(password),
+  );
+
+  return bytesToBase64(new Uint8Array(encrypted));
+}
+
 export function getAccessToken() {
   return authState.accessToken;
 }
@@ -234,11 +300,16 @@ export function setAuthenticated(value: boolean) {
 }
 
 export async function login(values: { username: string; password: string; remember?: boolean }) {
+  const encryptedPassword = await encryptLoginPassword(values.password);
   const payload = await request<LoginResponse>(
     '/api/auth/login',
     {
       method: 'POST',
-      body: JSON.stringify(values),
+      body: JSON.stringify({
+        username: values.username,
+        encryptedPassword,
+        remember: values.remember,
+      }),
     },
     {
       auth: false,

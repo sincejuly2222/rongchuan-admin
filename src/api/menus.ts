@@ -28,7 +28,7 @@ const mockMenus: MenuListItem[] = [
     id: 1,
     parent_id: 0,
     parent_name: null,
-    menu_name: '工作台',
+    menu_name: '首页',
     menu_code: 'dashboard',
     path: '/dashboard',
     component: 'views/DashboardPage',
@@ -62,20 +62,6 @@ const mockMenus: MenuListItem[] = [
     component: 'views/RolesPage',
     icon: 'SafetyOutlined',
     sort_order: 30,
-    status: 1,
-    created_at: '2026-04-03T09:00:00.000Z',
-    updated_at: '2026-04-03T09:00:00.000Z',
-  },
-  {
-    id: 4,
-    parent_id: 0,
-    parent_name: null,
-    menu_name: '权限管理',
-    menu_code: 'permissions',
-    path: '/permissions',
-    component: 'views/PermissionsPage',
-    icon: 'SafetyCertificateOutlined',
-    sort_order: 40,
     status: 1,
     created_at: '2026-04-03T09:00:00.000Z',
     updated_at: '2026-04-03T09:00:00.000Z',
@@ -296,12 +282,19 @@ export async function fetchMenus(params: MenuListParams) {
   return parseResponse<MenuListResponse>(response, '获取菜单列表失败');
 }
 
-export async function fetchMenuTree() {
+export async function fetchMenuTree(params: { scope?: 'all' } = {}) {
   if (isDevBypassToken(getAccessToken())) {
     return buildMockMenuTree(mockMenus);
   }
 
-  const response = await fetch(`${API_BASE_URL}/api/menus/tree`, {
+  const query = new URLSearchParams();
+
+  if (params.scope) {
+    query.set('scope', params.scope);
+  }
+
+  const queryString = query.toString();
+  const response = await fetch(`${API_BASE_URL}/api/menus/tree${queryString ? `?${queryString}` : ''}`, {
     headers: {
       Authorization: `Bearer ${getAccessToken() ?? ''}`,
     },

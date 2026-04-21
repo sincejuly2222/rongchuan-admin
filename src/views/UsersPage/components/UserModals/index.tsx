@@ -61,6 +61,8 @@ export function UserModals({
         forceRender
         confirmLoading={creating}
         destroyOnHidden
+        okText="确定"
+        cancelText="取消"
         onOk={onCreateOk}
         onCancel={onCreateCancel}
       >
@@ -119,6 +121,8 @@ export function UserModals({
         forceRender
         confirmLoading={editing}
         destroyOnHidden
+        okText="确定"
+        cancelText="取消"
         onOk={onEditOk}
         onCancel={onEditCancel}
       >
@@ -162,6 +166,8 @@ export function UserModals({
         forceRender
         confirmLoading={resettingPassword}
         destroyOnHidden
+        okText="确定"
+        cancelText="取消"
         onOk={onResetPasswordOk}
         onCancel={onResetPasswordCancel}
       >

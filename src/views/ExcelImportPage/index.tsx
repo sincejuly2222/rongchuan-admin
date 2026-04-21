@@ -1,7 +1,7 @@
 import { CloudUploadOutlined, DownloadOutlined, FileExcelOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
-import { Alert, App, Button, Card, Col, Modal, Progress, Radio, Row, Space, Statistic, Steps, Tag, Typography, Upload } from 'antd';
+import { Alert, App, Button, Card, Col, Progress, Radio, Row, Space, Statistic, Steps, Tag, Typography, Upload } from 'antd';
 import type { UploadProps } from 'antd';
 import { useRef, useState } from 'react';
 import { fetchImportJobs, uploadImportFile } from '../../api/importJobs';
@@ -23,7 +23,7 @@ function formatDateTime(value?: string | null) {
 }
 
 export function ExcelImportPage() {
-  const { message } = App.useApp();
+  const { message, modal } = App.useApp();
   const actionRef = useRef<ActionType>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [importType, setImportType] = useState<'alumni' | 'student'>('alumni');
@@ -74,7 +74,7 @@ export function ExcelImportPage() {
         <a
           key="report"
           onClick={() => {
-            Modal.info({
+            modal.info({
               title: '导入报告',
               width: 720,
               content: (
@@ -100,14 +100,14 @@ export function ExcelImportPage() {
   return (
     <div className="business-page">
       <Row gutter={[16, 16]} className="business-page__summary">
-        <Col xs={24} sm={12} xl={8}><Card bordered={false}><Statistic title="导入任务数" value={summary.total} prefix={<CloudUploadOutlined />} /></Card></Col>
-        <Col xs={24} sm={12} xl={8}><Card bordered={false}><Statistic title="累计成功导入" value={summary.success} valueStyle={{ color: '#1677ff' }} /></Card></Col>
-        <Col xs={24} sm={12} xl={8}><Card bordered={false}><Statistic title="累计失败记录" value={summary.failed} valueStyle={{ color: '#fa8c16' }} /></Card></Col>
+        <Col xs={24} sm={12} xl={8}><Card variant="borderless"><Statistic title="导入任务数" value={summary.total} prefix={<CloudUploadOutlined />} /></Card></Col>
+        <Col xs={24} sm={12} xl={8}><Card variant="borderless"><Statistic title="累计成功导入" value={summary.success} valueStyle={{ color: '#1677ff' }} /></Card></Col>
+        <Col xs={24} sm={12} xl={8}><Card variant="borderless"><Statistic title="累计失败记录" value={summary.failed} valueStyle={{ color: '#fa8c16' }} /></Card></Col>
       </Row>
 
       <Row gutter={[16, 16]}>
         <Col xs={24} xl={14}>
-          <Card title="Excel 批量导入" bordered={false} className="business-page__upload-card">
+          <Card title="Excel 批量导入" variant="borderless" className="business-page__upload-card">
             <Space direction="vertical" size={16} style={{ width: '100%' }}>
               <Alert type="info" showIcon message="已接入真实导入接口" description="支持上传 Excel 后直接入库，并自动生成导入任务记录与错误报告。" />
               <Steps items={[{ title: '上传 Excel', description: '选择校友或学籍模板' }, { title: '后端解析', description: '读取首个工作表并执行校验' }, { title: '数据入库', description: '成功记录写入业务表' }, { title: '生成报告', description: '导入结果写入任务记录' }]} />
@@ -177,7 +177,7 @@ export function ExcelImportPage() {
         </Col>
 
         <Col xs={24} xl={10}>
-          <Card title="导入建议" bordered={false} className="business-page__upload-card">
+          <Card title="导入建议" variant="borderless" className="business-page__upload-card">
             <Space direction="vertical" size={12}>
               <Typography.Text>1. 第一行必须是表头，系统会按中文表头匹配字段。</Typography.Text>
               <Typography.Text>2. 校友导入建议至少包含“姓名”，学籍导入建议至少包含“姓名、专业、入学年份”。</Typography.Text>

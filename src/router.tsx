@@ -7,14 +7,14 @@ import { AdminLayout } from './views/AdminLayout';
 const DashboardPage = lazy(() =>
   import('./views/DashboardPage').then((module) => ({ default: module.DashboardPage }))
 );
+const ApiDetailPage = lazy(() =>
+  import('./views/ApiDetailPage').then((module) => ({ default: module.ApiDetailPage }))
+);
 const UsersPage = lazy(() =>
   import('./views/UsersPage').then((module) => ({ default: module.UsersPage }))
 );
 const RolesPage = lazy(() =>
   import('./views/RolesPage').then((module) => ({ default: module.RolesPage }))
-);
-const PermissionsPage = lazy(() =>
-  import('./views/PermissionsPage').then((module) => ({ default: module.PermissionsPage }))
 );
 const MenusPage = lazy(() =>
   import('./views/MenusPage').then((module) => ({ default: module.MenusPage }))
@@ -99,9 +99,9 @@ export function AppRouter() {
           children: [
             { index: true, element: <Navigate to="/dashboard" replace /> },
             { path: 'dashboard', element: withSuspense(<DashboardPage />) },
+            { path: 'dashboard/apis/:apiId', element: withSuspense(<ApiDetailPage />) },
             { path: 'users', element: withSuspense(<UsersPage />) },
             { path: 'roles', element: withSuspense(<RolesPage />) },
-            { path: 'permissions', element: withSuspense(<PermissionsPage />) },
             { path: 'menus', element: withSuspense(<MenusPage />) },
             { path: 'profile', element: withSuspense(<ProfilePage />) },
             { path: 'alumni', element: withSuspense(<AlumniPage />) },

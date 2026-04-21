@@ -2,6 +2,7 @@ import { getAccessToken, isDevBypassToken, logout } from '../auth';
 import type {
   ApiResponse,
   CreateUserRequest,
+  DeleteUserResponse,
   UpdateUserRequest,
   UpdateUserStatusResponse,
   UserDetail,
@@ -19,6 +20,7 @@ export type {
   UserListItem,
   UserListParams,
   UserListResponse,
+  DeleteUserResponse,
 };
 
 const mockUsers: UserDetail[] = [
@@ -248,4 +250,30 @@ export async function updateUserStatus(id: number, status: number) {
   }
 
   return parseResponse<UpdateUserStatusResponse>(response, '更新用户状态失败');
+}
+
+export async function deleteUser(id: number) {
+  if (isDevBypassToken(getAccessToken())) {
+    const index = mockUsers.findIndex((item) => item.id === id);
+
+    if (index < 0) {
+      throw new Error('用户不存在');
+    }
+
+    mockUsers.splice(index, 1);
+    return { id } satisfies DeleteUserResponse;
+  }
+
+  const response = await fetch(`${API_BASE_URL}/api/users/${id}`, {
+    method: 'DELETE',
+    headers: withAuthHeaders(),
+    credentials: 'include',
+  });
+
+  if (response.status === 401) {
+    await logout();
+    throw new Error('登录已失效，请重新登录');
+  }
+
+  return parseResponse<DeleteUserResponse>(response, '删除用户失败');
 }

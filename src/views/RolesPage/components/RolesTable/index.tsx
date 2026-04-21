@@ -17,7 +17,7 @@ type RolesTableProps = {
   setSummary: (summary: Record<StatusTabKey, number>) => void;
   onCreate: () => void;
   onEdit: (record: RoleRecord) => void;
-  onPermissionConfig: (record: RoleRecord) => void;
+  onMenuConfig: (record: RoleRecord) => void;
 };
 
 export function RolesTable({
@@ -30,7 +30,7 @@ export function RolesTable({
   setSummary,
   onCreate,
   onEdit,
-  onPermissionConfig,
+  onMenuConfig,
 }: RolesTableProps) {
   const columns: ProColumns<RoleRecord>[] = [
     {
@@ -55,8 +55,8 @@ export function RolesTable({
       search: false,
     },
     {
-      title: '权限数',
-      dataIndex: 'permissionCount',
+      title: '菜单数',
+      dataIndex: 'menuCount',
       width: 120,
       search: false,
     },
@@ -96,11 +96,25 @@ export function RolesTable({
     {
       title: '操作',
       valueType: 'option',
-      width: 260,
-      render: (_, record) => [
-        <a key="edit" onClick={() => onEdit(record)}>编辑</a>,
-        <a key="permission" onClick={() => onPermissionConfig(record)}>权限配置</a>,
-      ],
+      width: 240,
+      render: (_, record) => {
+        const isSuperAdminRole = record.code === 'SUPER_ADMIN';
+
+        return [
+          <a key="edit" onClick={() => onEdit(record)}>编辑</a>,
+          isSuperAdminRole ? (
+            <Typography.Text
+              key="menu-disabled"
+              disabled
+              title="超级管理员角色不可修改菜单权限"
+            >
+              菜单配置
+            </Typography.Text>
+          ) : (
+            <a key="menu" onClick={() => onMenuConfig(record)}>菜单配置</a>
+          ),
+        ];
+      },
     },
   ];
 
@@ -170,7 +184,7 @@ export function RolesTable({
         tableAlertRender={false}
         tableAlertOptionRender={false}
         toolbar={{
-          subTitle: '支持角色查询、新增编辑和权限配置。',
+          subTitle: '支持角色查询、新增编辑和可访问菜单配置。',
         }}
         toolBarRender={() => [
           <Button key="create" type="primary" onClick={onCreate}>

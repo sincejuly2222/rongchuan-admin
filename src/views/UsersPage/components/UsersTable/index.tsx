@@ -1,6 +1,6 @@
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
-import { Button, Switch, Tabs, Tag, Typography } from 'antd';
+import { Button, Popconfirm, Switch, Tabs, Tag, Typography } from 'antd';
 import type { RefObject } from 'react';
 import { fetchUsers } from '../../../../api/users';
 import type { StatusTabKey, UserRecord } from '../../types';
@@ -13,6 +13,7 @@ type UsersTableProps = {
   summary: Record<StatusTabKey, number>;
   selectedRows: UserRecord[];
   roleNameToIdMap: Map<string, number>;
+  superAdminRoleIds: Set<number>;
   setActiveTab: (key: StatusTabKey) => void;
   setSelectedRows: (rows: UserRecord[]) => void;
   setSummary: (summary: Record<StatusTabKey, number>) => void;
@@ -20,6 +21,7 @@ type UsersTableProps = {
   onEdit: (record: UserRecord) => void;
   onResetPassword: (record: UserRecord) => void;
   onStatusChange: (record: UserRecord, checked: boolean) => Promise<void>;
+  onDelete: (record: UserRecord) => void;
 };
 
 export function UsersTable({
@@ -28,6 +30,7 @@ export function UsersTable({
   summary,
   selectedRows,
   roleNameToIdMap,
+  superAdminRoleIds,
   setActiveTab,
   setSelectedRows,
   setSummary,
@@ -35,6 +38,7 @@ export function UsersTable({
   onEdit,
   onResetPassword,
   onStatusChange,
+  onDelete,
 }: UsersTableProps) {
   const columns: ProColumns<UserRecord>[] = [
     {
@@ -106,19 +110,44 @@ export function UsersTable({
     {
       title: '操作',
       valueType: 'option',
-      width: 210,
-      render: (_, record) => [
-        <a key="edit" onClick={() => onEdit(record)}>编辑</a>,
-        <a key="reset" onClick={() => onResetPassword(record)}>重置密码</a>,
-        <Switch
-          key="switch"
-          size="small"
-          checked={record.status === '启用'}
-          onChange={(checked) => {
-            void onStatusChange(record, checked);
-          }}
-        />,
-      ],
+      width: 270,
+      render: (_, record) => {
+        const isSuperAdminUser = record.roleIds.some((roleId) => superAdminRoleIds.has(roleId));
+
+        return [
+          <a key="edit" onClick={() => onEdit(record)}>编辑</a>,
+          <a key="reset" onClick={() => onResetPassword(record)}>重置密码</a>,
+          isSuperAdminUser ? (
+            <Typography.Text
+              key="delete-disabled"
+              disabled
+              title="超级管理员用户不可删除"
+            >
+              删除
+            </Typography.Text>
+          ) : (
+            <Popconfirm
+              key="delete"
+              title="删除用户"
+              description={`确认删除用户 ${record.account}？该操作不可恢复。`}
+              okText="删除"
+              cancelText="取消"
+              okButtonProps={{ danger: true }}
+              onConfirm={() => onDelete(record)}
+            >
+              <a className="users-table__danger-action">删除</a>
+            </Popconfirm>
+          ),
+          <Switch
+            key="switch"
+            size="small"
+            checked={record.status === '启用'}
+            onChange={(checked) => {
+              void onStatusChange(record, checked);
+            }}
+          />,
+        ];
+      },
     },
   ];
 

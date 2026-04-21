@@ -32,7 +32,7 @@ export function toRoleRecord(item: RoleListItem): RoleRecord {
     code: item.role_code,
     description: item.description ?? '-',
     memberCount: item.member_count,
-    permissionCount: item.permission_count,
+    menuCount: item.menu_count ?? 0,
     status: item.status === 1 ? '启用' : '禁用',
     createdAt: formatDateTime(item.created_at),
     updatedAt: formatDateTime(item.updated_at),

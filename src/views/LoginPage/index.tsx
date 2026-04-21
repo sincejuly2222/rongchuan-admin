@@ -107,7 +107,7 @@ export function LoginPage() {
           </div>
         </section>
 
-        <Card bordered={false} className="login-card">
+        <Card variant="borderless" className="login-card">
           <div className="login-card__header">
             <Typography.Title level={3}>账号登录</Typography.Title>
           </div>

@@ -29,8 +29,13 @@ export type AuthUser = {
 
 export type LoginRequest = {
   username: string;
-  password: string;
+  encryptedPassword: string;
   remember?: boolean;
+};
+
+export type LoginPublicKeyResponse = {
+  publicKey: string;
+  algorithm: 'RSA-OAEP-256';
 };
 
 export type LoginResponse = {
@@ -149,6 +154,10 @@ export type UpdateUserStatusResponse = {
   status: 0 | 1;
 };
 
+export type DeleteUserResponse = {
+  id: number;
+};
+
 export type RoleListItem = {
   id: number;
   role_name: string;
@@ -158,7 +167,7 @@ export type RoleListItem = {
   created_at: string;
   updated_at: string;
   member_count: number;
-  permission_count: number;
+  menu_count: number;
 };
 
 export type RoleListResponse = PaginatedResponse<RoleListItem>;
@@ -171,13 +180,13 @@ export type RoleListParams = {
   status?: string | number;
 };
 
-export type RolePermissionsResponse = {
+export type RoleMenusResponse = {
   roleId: number;
-  permissionIds: number[];
+  menuIds: number[];
 };
 
-export type UpdateRolePermissionsRequest = {
-  permissionIds: number[];
+export type UpdateRoleMenusRequest = {
+  menuIds: number[];
 };
 
 export type CreateRoleRequest = {

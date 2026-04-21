@@ -1,7 +1,7 @@
 import { AuditOutlined, CheckCircleOutlined, FolderOpenOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
-import { App, Card, Col, Modal, Row, Select, Space, Statistic, Tag } from 'antd';
+import { App, Card, Col, Row, Select, Space, Statistic, Tag } from 'antd';
 import { useRef, useState } from 'react';
 import { fetchStudentRecords, updateStudentRecordStatus } from '../../api/studentRecords';
 import type { StudentRecordListItem } from '../../api/types';
@@ -20,7 +20,7 @@ function getStatusMeta(status: number) {
 }
 
 export function StudentStatusPage() {
-  const { message } = App.useApp();
+  const { message, modal } = App.useApp();
   const actionRef = useRef<ActionType>(null);
   const [summary, setSummary] = useState({ total: 0, approved: 0, claimed: 0 });
 
@@ -53,7 +53,7 @@ export function StudentStatusPage() {
           key="audit"
           onClick={() => {
             let nextStatus = record.status;
-            Modal.confirm({
+            modal.confirm({
               title: '更新学籍状态',
               content: (
                 <Space direction="vertical" style={{ width: '100%' }}>
@@ -89,9 +89,9 @@ export function StudentStatusPage() {
   return (
     <div className="business-page">
       <Row gutter={[16, 16]} className="business-page__summary">
-        <Col xs={24} sm={12} xl={8}><Card bordered={false}><Statistic title="当前学籍记录" value={summary.total} prefix={<FolderOpenOutlined />} /></Card></Col>
-        <Col xs={24} sm={12} xl={8}><Card bordered={false}><Statistic title="已审核" value={summary.approved} prefix={<CheckCircleOutlined />} /></Card></Col>
-        <Col xs={24} sm={12} xl={8}><Card bordered={false}><Statistic title="已认领" value={summary.claimed} prefix={<AuditOutlined />} /></Card></Col>
+        <Col xs={24} sm={12} xl={8}><Card variant="borderless"><Statistic title="当前学籍记录" value={summary.total} prefix={<FolderOpenOutlined />} /></Card></Col>
+        <Col xs={24} sm={12} xl={8}><Card variant="borderless"><Statistic title="已审核" value={summary.approved} prefix={<CheckCircleOutlined />} /></Card></Col>
+        <Col xs={24} sm={12} xl={8}><Card variant="borderless"><Statistic title="已认领" value={summary.claimed} prefix={<AuditOutlined />} /></Card></Col>
       </Row>
 
       <ProTable<StudentRecordListItem>

@@ -1,0 +1,64 @@
+.api-detail-page {
+  &__toolbar {
+    margin-bottom: 16px;
+  }
+}
+
+.api-detail-hero {
+  grid-template-columns: minmax(0, 1fr) 280px;
+}
+
+.api-detail-hero__module {
+  padding: 22px;
+  border: 1px solid rgba(15, 118, 110, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.72);
+
+  span,
+  strong {
+    display: block;
+  }
+
+  span {
+    color: var(--api-dashboard-muted);
+    font-size: 13px;
+  }
+
+  strong {
+    margin: 8px 0;
+    color: var(--api-dashboard-ink);
+    font-size: 26px;
+    line-height: 1.15;
+  }
+}
+
+.api-detail-examples {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+
+  pre {
+    min-height: 260px;
+    margin: 0;
+    padding: 18px;
+    overflow: auto;
+    border: 1px solid rgba(15, 118, 110, 0.12);
+    border-radius: 14px;
+    background: #101817;
+    color: #d7fff7;
+    font-size: 13px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+  }
+
+  .ant-typography {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 1180px) {
+  .api-detail-hero,
+  .api-detail-examples {
+    grid-template-columns: 1fr;
+  }
+}

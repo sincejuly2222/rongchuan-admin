@@ -298,10 +298,10 @@ export function AlumniPage() {
   return (
     <div className="business-page">
       <Row gutter={[16, 16]} className="business-page__summary">
-        <Col xs={24} sm={12} xl={6}><Card bordered={false}><Statistic title="当前结果总数" value={summary.total} prefix={<BankOutlined />} /></Card></Col>
-        <Col xs={24} sm={12} xl={6}><Card bordered={false}><Statistic title="已认证校友" value={summary.verified} valueStyle={{ color: '#1677ff' }} /></Card></Col>
-        <Col xs={24} sm={12} xl={6}><Card bordered={false}><Statistic title="待认证校友" value={summary.pending} valueStyle={{ color: '#faad14' }} /></Card></Col>
-        <Col xs={24} sm={12} xl={6}><Card bordered={false}><Statistic title="覆盖城市" value={summary.cities} /></Card></Col>
+        <Col xs={24} sm={12} xl={6}><Card variant="borderless"><Statistic title="当前结果总数" value={summary.total} prefix={<BankOutlined />} /></Card></Col>
+        <Col xs={24} sm={12} xl={6}><Card variant="borderless"><Statistic title="已认证校友" value={summary.verified} valueStyle={{ color: '#1677ff' }} /></Card></Col>
+        <Col xs={24} sm={12} xl={6}><Card variant="borderless"><Statistic title="待认证校友" value={summary.pending} valueStyle={{ color: '#faad14' }} /></Card></Col>
+        <Col xs={24} sm={12} xl={6}><Card variant="borderless"><Statistic title="覆盖城市" value={summary.cities} /></Card></Col>
       </Row>
 
       <ProTable<AlumniListItem>
@@ -351,7 +351,7 @@ export function AlumniPage() {
         ]}
       />
 
-      <Modal title={editingRecord ? '编辑校友' : '新增校友'} open={editOpen} confirmLoading={submitting} destroyOnHidden onOk={() => void handleSubmitAlumni()} onCancel={() => { setEditOpen(false); setEditingRecord(null); form.resetFields(); }}>
+      <Modal title={editingRecord ? '编辑校友' : '新增校友'} open={editOpen} confirmLoading={submitting} destroyOnHidden okText="确定" cancelText="取消" onOk={() => void handleSubmitAlumni()} onCancel={() => { setEditOpen(false); setEditingRecord(null); form.resetFields(); }}>
         <Form form={form} layout="vertical" initialValues={{ status: 1, verifiedStatus: 0, allowSearch: true }}>
           <Form.Item label="姓名" name="name" rules={[{ required: true, message: '请输入姓名' }]}><Input /></Form.Item>
           <Form.Item label="手机号" name="phone"><Input /></Form.Item>
@@ -366,7 +366,7 @@ export function AlumniPage() {
         </Form>
       </Modal>
 
-      <Modal title={<Space><IdcardOutlined />学籍信息</Space>} open={studentOpen} confirmLoading={submitting} destroyOnHidden onOk={() => void handleSubmitStudent()} onCancel={() => setStudentOpen(false)}>
+      <Modal title={<Space><IdcardOutlined />学籍信息</Space>} open={studentOpen} confirmLoading={submitting} destroyOnHidden okText="确定" cancelText="取消" onOk={() => void handleSubmitStudent()} onCancel={() => setStudentOpen(false)}>
         <Form form={studentForm} layout="vertical" initialValues={{ school: '融川大学', status: 0 }}>
           <Form.Item label="学校" name="school" rules={[{ required: true, message: '请输入学校' }]}><Input /></Form.Item>
           <Form.Item label="学院" name="college"><Input /></Form.Item>
@@ -379,7 +379,7 @@ export function AlumniPage() {
         </Form>
       </Modal>
 
-      <Modal title={<Space><ProfileOutlined />名片信息</Space>} open={cardOpen} confirmLoading={submitting} destroyOnHidden onOk={() => void handleSubmitCard()} onCancel={() => setCardOpen(false)}>
+      <Modal title={<Space><ProfileOutlined />名片信息</Space>} open={cardOpen} confirmLoading={submitting} destroyOnHidden okText="确定" cancelText="取消" onOk={() => void handleSubmitCard()} onCancel={() => setCardOpen(false)}>
         <Form form={cardForm} layout="vertical" initialValues={{ showPhone: false, showWechat: false, needApproval: false, allowSearch: true }}>
           <Form.Item label="名片标语" name="slogan"><Input /></Form.Item>
           <Form.Item label="微信号" name="wechat"><Input /></Form.Item>
