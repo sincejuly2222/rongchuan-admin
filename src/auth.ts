@@ -217,7 +217,9 @@ async function fetchLoginPublicKey() {
         auth: false,
         retry: false,
       },
-    );
+    ).finally(() => {
+      loginPublicKeyPromise = null;
+    });
   }
 
   return loginPublicKeyPromise;
