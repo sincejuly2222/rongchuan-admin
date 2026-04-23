@@ -1,0 +1,1 @@
+import{a as e}from"./rolldown-runtime-COnpUsM8.js";import{d as t}from"./react-ZBHdyRrG.js";import{Ar as n}from"./pro-layout-DH5P67_R.js";var r=e(t());n(function(e,t){t._reactRoot||=(0,r.createRoot)(t);var n=t._reactRoot;return n.render(e),function(){return new Promise(function(e){setTimeout(function(){n.unmount(),e()},0)})}});
