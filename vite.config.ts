@@ -4,10 +4,11 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const proxyTarget = env.VITE_DEV_PROXY_TARGET || 'http://localhost:3000';
+  const base = env.VITE_APP_BASE || (mode === 'production' ? '/admin/' : '/');
 
   return {
     plugins: [react()],
-    base: '/admin/',
+    base,
     server: {
       host: '0.0.0.0',
       port: 5173,

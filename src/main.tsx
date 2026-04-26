@@ -9,6 +9,9 @@ import './styles/reset.css';
 import './styles/base.css';
 import './styles/pro-table.less';
 
+const routerBasename =
+  import.meta.env.BASE_URL === '/' ? undefined : import.meta.env.BASE_URL.replace(/\/$/, '');
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ConfigProvider
@@ -27,7 +30,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       }}
     >
       <AntdApp>
-        <BrowserRouter>
+        <BrowserRouter basename={routerBasename}>
           <AppRouter />
         </BrowserRouter>
       </AntdApp>
